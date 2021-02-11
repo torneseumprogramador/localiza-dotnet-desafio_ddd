@@ -24,12 +24,13 @@ namespace Domain.UseCase.UserServices
         {
             if (person.Id > 0)
             {
-                var size = await personRepository.CountByIdAndDocument<IPerson>(person.Id, person.Document);
+                var size = await personRepository.CountByIdAndDocument<IPerson>(person.Id, person.Document, person.Type);
                 if (size > 0) throw new EntityUniq("Documento já cadastrado");
             }
             else
             {
-                var size = await personRepository.CountByDocument<IPerson>(person.Document);
+                if(person.Type == 0) person.Type = Convert.ToInt16(person.Role);
+                var size = await personRepository.CountByDocument<IPerson>(person.Document, person.Type);
                 if (size > 0) throw new EntityUniq("Documento já cadastrado");
             }
             
@@ -41,9 +42,13 @@ namespace Domain.UseCase.UserServices
             await entityRepository.Delete<IPerson>(id);
         }
 
-        public async Task<UserJwt> Login(IPerson person, IToken token)
+        public async Task<UserJwt> Login(UserLogin userLogin, IToken token)
         {
-            var loggedPerson = await personRepository.FindByDocumentAndPassword<IPerson>(person.Document, person.Password);
+            IPerson loggedPerson;
+            if (userLogin.Document.Length >= 11)
+                loggedPerson = await personRepository.FindByDocumentAndPassword<User>(userLogin.Document, userLogin.Password, Convert.ToInt16(PersonRole.User));
+            else loggedPerson = await personRepository.FindByDocumentAndPassword<Operator>(userLogin.Document, userLogin.Password, Convert.ToInt16(PersonRole.Operator));
+
             if (loggedPerson == null) throw new EntityNotFound("Documento e senha inválidos");
             return new UserJwt()
             {
@@ -55,9 +60,9 @@ namespace Domain.UseCase.UserServices
             };
         }
 
-        public async Task<ICollection<UserView>> All()
+        public async Task<ICollection<T>> All<T>(PersonRole role)
         {
-           return await entityRepository.All<UserView>();
+           return await personRepository.All<T>(Convert.ToInt16(role));
         }
     }
 }

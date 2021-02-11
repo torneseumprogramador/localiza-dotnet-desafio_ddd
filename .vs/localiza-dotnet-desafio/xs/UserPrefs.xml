@@ -6,7 +6,9 @@
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
               <Node name="Authentication" expanded="True" />
-              <Node name="Controllers" expanded="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="UsersController.cs" selected="True" />
+              </Node>
             </Node>
             <Node name="Domain" expanded="True">
               <Node name="Entities" expanded="True" />
@@ -18,9 +20,7 @@
             <Node name="Infrastructure" expanded="True">
               <Node name="Database" expanded="True" />
               <Node name="Services" expanded="True">
-                <Node name="Person" expanded="True">
-                  <Node name="PersonRepository.cs" selected="True" />
-                </Node>
+                <Node name="Person" expanded="True" />
               </Node>
             </Node>
             <Node name="Test" expanded="True">

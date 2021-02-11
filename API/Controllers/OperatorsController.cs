@@ -14,33 +14,33 @@ using API.Authentication;
 namespace api.Controllers
 {
     [ApiController]
-    public class UsersController : ControllerBase
+    public class OperatorsController : ControllerBase
     {
         private readonly UserService _userService;
-        private readonly ILogger<UsersController> _logger;
+        private readonly ILogger<OperatorsController> _logger;
 
-        public UsersController(ILogger<UsersController> logger)
+        public OperatorsController(ILogger<OperatorsController> logger)
         {
             _logger = logger;
             _userService = new UserService(new PersonRepository(), new EntityRepository());
         }
 
         [HttpGet]
-        [Route("/users")]
+        [Route("/operators")]
         [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<UserView>> Index()
+        public async Task<ICollection<OperatorView>> Index()
         {
-            return await _userService.All<UserView>(PersonRole.User);
+            return await _userService.All<OperatorView>(PersonRole.Operator);
         }
 
         [HttpPost]
-        [Route("/users")]
+        [Route("/operators")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Create([FromBody] User user)
+        public async Task<IActionResult> Create([FromBody] Operator op)
         {
             try
             {
-                await _userService.Save(user);
+                await _userService.Save(op);
                 return StatusCode(201);
             }
             catch(EntityUniq err)
@@ -52,14 +52,14 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/users/{id}")]
+        [Route("/operators/{id}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Update(int id, [FromBody] User user)
+        public async Task<IActionResult> Update(int id, [FromBody] Operator op)
         {
-            user.Id = id;
+            op.Id = id;
             try
             {
-                await _userService.Save(user);
+                await _userService.Save(op);
                 return StatusCode(204);
             }
             catch(EntityUniq err)
@@ -71,7 +71,7 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/users/{id}")]
+        [Route("/operators/{id}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(int id)
         {

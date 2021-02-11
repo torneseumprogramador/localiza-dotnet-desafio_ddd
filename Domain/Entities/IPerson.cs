@@ -8,6 +8,7 @@ namespace Domain.Entities
         string Name {get; set;}
         string Password {get; set;}
         string Document {get; set; }
+        int Type {get; set; }
         PersonRole Role {get;}
     }
 }

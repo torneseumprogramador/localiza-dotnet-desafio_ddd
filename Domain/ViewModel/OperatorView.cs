@@ -6,7 +6,7 @@ using Infrastructure.Database;
 namespace Domain.ViewModel
 {
     [Table(Name = "Users")]
-    public record UserView
+    public record OperatorView
     {
         public int Id { get; set; }
         public string Name { get; set; }

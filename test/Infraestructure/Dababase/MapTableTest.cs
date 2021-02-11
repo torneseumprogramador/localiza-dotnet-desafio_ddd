@@ -9,10 +9,10 @@ namespace Test.Infrastructure.Database
     {
         [Pk(Name = "id")]
         public int Id {get;set;}
-        [Fields(Name = "name")]
+        [DbField(Name = "name")]
         public string Name {get;set;}
 
-        [Fields(Name = "phone")]
+        [DbField(Name = "phone")]
         public string Phone {get;set;}
     }
     

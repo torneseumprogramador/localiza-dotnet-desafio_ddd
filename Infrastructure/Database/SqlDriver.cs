@@ -10,7 +10,8 @@ namespace Infrastructure.Database
     {
         public SqlDriver()
         {
-            string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            //string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            string cnn = "Server=localhost;Database=localiza_labs;Uid=sa;Pwd=!1#2a3d4c5g6v";
             this.connectionString = cnn;
         }
 
@@ -129,16 +130,33 @@ namespace Infrastructure.Database
                 }
 
                 using SqlDataReader dr = command.ExecuteReader();
-                while (await dr.ReadAsync())
-                {
+                if (await dr.ReadAsync())
                     this.fill(instance, dr);
-                    break;
-                }
+                else instance = null;
+
                 await dr.CloseAsync();
                 await dr.DisposeAsync();
             }
 
             return (T)instance;
+        }
+
+        public async Task<T> FindById<T>(int id)
+        {
+            var instance = MapTable.CreateInstanceAndSetId<T>(id);
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                var queryString = MapTable.BuildFindById(instance);
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Connection.Open();
+                using SqlDataReader dr = command.ExecuteReader();
+                if (await dr.ReadAsync())
+                    this.fill(instance, dr);
+
+                await dr.CloseAsync();
+                await dr.DisposeAsync();
+            }
+            return instance;
         }
 
         public async Task<int> CountByPrecedure<T>(string queryString, List<DbParameter> parameters = null)
@@ -175,26 +193,6 @@ namespace Infrastructure.Database
                 }
                 catch { }
             }
-        }
-
-        public async Task<T> FindById<T>(int id)
-        {
-            var instance = MapTable.CreateInstanceAndSetId<T>(id);
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                var queryString = MapTable.BuildFindById(instance);
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Connection.Open();
-                using SqlDataReader dr = command.ExecuteReader();
-                while (await dr.ReadAsync())
-                {
-                    this.fill(instance, dr);
-                    break;
-                }
-                await dr.CloseAsync();
-                await dr.DisposeAsync();
-            }
-            return instance;
         }
 
         public async Task Delete<T>(T obj)

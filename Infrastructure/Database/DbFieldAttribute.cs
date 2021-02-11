@@ -2,7 +2,7 @@
 
 namespace Infrastructure.Database
 {
-    public class FieldsAttribute : Attribute
+    public class DbFieldAttribute : Attribute
     {
         public string Name { get; set; }
     }

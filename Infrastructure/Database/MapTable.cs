@@ -25,7 +25,7 @@ namespace Infrastructure.Database
 
             foreach (var field in fields)
             {
-                var persistedField = field.GetCustomAttribute<FieldsAttribute>();
+                var persistedField = field.GetCustomAttribute<DbFieldAttribute>();
                 if (persistedField != null)
                 {
                     if (field.GetValue(entity) != null)
@@ -49,7 +49,7 @@ namespace Infrastructure.Database
 
         public static T CreateInstanceAndSetId<T>(int id)
         {
-            var entity = Activator.CreateInstance<T>();
+            var entity = Activator.CreateInstance(typeof(T));
             var fields = entity.GetType().GetProperties();
             foreach (var field in fields)
             {
@@ -60,7 +60,7 @@ namespace Infrastructure.Database
                     break;
                 }
             }
-            return entity;
+            return (T)entity;
         }
 
         public static string BuilderUpdate<T>(T entity)
@@ -83,7 +83,7 @@ namespace Infrastructure.Database
                 var pkAttr = field.GetCustomAttribute<PkAttribute>();
                 if (pkAttr != null) pkProperty = field;
 
-                var persistedField = field.GetCustomAttribute<FieldsAttribute>();
+                var persistedField = field.GetCustomAttribute<DbFieldAttribute>();
                 if (persistedField != null)
                 {
                     var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
@@ -273,7 +273,7 @@ namespace Infrastructure.Database
                     }
                 }
 
-                var persistedField = field.GetCustomAttribute<FieldsAttribute>();
+                var persistedField = field.GetCustomAttribute<DbFieldAttribute>();
                 if (persistedField != null)
                 {
                     var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
