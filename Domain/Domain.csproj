@@ -7,7 +7,7 @@
   <ItemGroup>
     <Folder Include="UseCase\" />
     <Folder Include="ViewModel\" />
-    <Folder Include="UseCase\UserServices\" />
+    <Folder Include="UseCase\PersonServices\" />
     <Folder Include="Authentication\" />
     <Folder Include="ViewModel\Jwt\" />
   </ItemGroup>

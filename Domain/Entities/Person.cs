@@ -1,8 +1,8 @@
+
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Infrastructure.Database;
 
 namespace Domain.Entities
 {
@@ -29,6 +29,7 @@ namespace Domain.Entities
 		[Required]
         public string Password { get; set; }
 
+		[JsonIgnore]
         public PersonRole Role { get { return (PersonRole)Enum.ToObject(typeof(PersonRole), this.Type); } }
     }
 }

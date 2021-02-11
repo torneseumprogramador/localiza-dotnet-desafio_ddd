@@ -6,7 +6,6 @@ using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Domain.UseCase.UserServices;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services.Person;
 using Infrastructure.Services;
 
 namespace api.Controllers
@@ -14,13 +13,13 @@ namespace api.Controllers
     [ApiController]
     public class PersonsController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly EntityService _entityService;
         private readonly ILogger<PersonsController> _logger;
 
         public PersonsController(ILogger<PersonsController> logger)
         {
             _logger = logger;
-            _userService = new UserService(new PersonRepository(), new EntityRepository());
+            _entityService = new EntityService(new EntityRepository());
         }
 
         [HttpGet]
@@ -28,7 +27,7 @@ namespace api.Controllers
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Person>> Index()
         {
-            return await _userService.All<Person>(PersonRole.User);
+            return await _entityService.All<Person>();
         }
     }
 }

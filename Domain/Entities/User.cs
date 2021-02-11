@@ -2,11 +2,9 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
-using Infrastructure.Database;
 
 namespace Domain.Entities
 {
-    //[Table(Name = "users")]
 	[Table("users")]
 	public class User : IPerson, IUser
 	{

@@ -4,23 +4,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Domain.Entities;
-using Domain.UseCase.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Services.Person;
 using Infrastructure.Services;
+using Domain.UseCase.PersonServices;
 
 namespace api.Controllers
 {
     [ApiController]
     public class OperatorsController : ControllerBase
     {
-        private readonly UserService _userService;
+        private readonly PersonService _personService;
         private readonly ILogger<OperatorsController> _logger;
 
         public OperatorsController(ILogger<OperatorsController> logger)
         {
             _logger = logger;
-            _userService = new UserService(new PersonRepository(), new EntityRepository());
+            _personService = new PersonService(new PersonRepository(), new EntityRepository());
         }
 
         [HttpGet]
@@ -28,7 +28,7 @@ namespace api.Controllers
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Operator>> Index()
         {
-            return await _userService.All<Operator>(PersonRole.Operator);
+            return await _personService.All<Operator>(PersonRole.Operator);
         }
 
         [HttpPost]
@@ -38,7 +38,7 @@ namespace api.Controllers
         {
             try
             {
-                await _userService.Save(op);
+                await _personService.Save(op);
                 return StatusCode(201);
             }
             catch(EntityUniq err)
@@ -57,7 +57,7 @@ namespace api.Controllers
             op.Id = id;
             try
             {
-                await _userService.Save(op);
+                await _personService.Save(op);
                 return StatusCode(204);
             }
             catch(EntityUniq err)
@@ -75,7 +75,7 @@ namespace api.Controllers
         {
             try
             {
-                await _userService.Delete(id);
+                await _personService.Delete(id);
                 return StatusCode(204);
             }
             catch(EntityEmptyId err)
