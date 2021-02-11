@@ -1,9 +1,7 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/Database/SqlDriver.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/Services/Person/PersonRepository.cs">
     <Files>
-      <File FileName="Infrastructure/Services/EntityRepository.cs" Line="1" Column="1" />
-      <File FileName="Infrastructure/Services/Person/PersonRepository.cs" Line="1" Column="1" />
-      <File FileName="Infrastructure/Database/SqlDriver.cs" Line="9" Column="27" />
+      <File FileName="Infrastructure/Services/Person/PersonRepository.cs" Line="41" Column="27" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -23,7 +21,9 @@
             <Node name="Infrastructure" expanded="True">
               <Node name="Database" expanded="True" />
               <Node name="Services" expanded="True">
-                <Node name="Person" expanded="True" />
+                <Node name="Person" expanded="True">
+                  <Node name="PersonRepository.cs" selected="True" />
+                </Node>
               </Node>
             </Node>
             <Node name="Test" expanded="True">

@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Infrastructure.Database;
 
@@ -6,24 +8,67 @@ namespace Infrastructure.Services.Person
 {
     public class PersonRepository : IPersonRepository
     {
-        public Task<ICollection<T>> All<T>()
+        public PersonRepository()
         {
-            throw new System.NotImplementedException();
+            this.sqlDriver = new SqlDriver();
         }
 
-        public Task<int> CountByDocument<T>(string document)
+        public SqlDriver sqlDriver;
+
+        public async Task<ICollection<T>> All<T>()
         {
-            throw new System.NotImplementedException();
+            return await this.sqlDriver.All<T>();
         }
 
-        public Task<int> CountByIdAndDocument<T>(int id, string document)
+        public async Task<int> CountByDocument<T>(string document)
         {
-            throw new System.NotImplementedException();
+            List<DbParameter> parameters = new List<DbParameter>();
+
+            var parameterDocument = new SqlParameter("@document", System.Data.SqlDbType.VarChar)
+            {
+                Value = document
+            };
+            parameters.Add(parameterDocument);
+
+            return await this.sqlDriver.CountByPrecedure<T>("sp_CountUserByDocument", parameters);
         }
 
-        public Task<T> FindByDocumentAndPassword<T>(string document, string password)
+        public async Task<int> CountByIdAndDocument<T>(int id, string document)
         {
-            throw new System.NotImplementedException();
+            List<DbParameter> parameters = new List<DbParameter>();
+
+            var parameterId = new SqlParameter("@id", System.Data.SqlDbType.Int)
+            {
+                Value = id
+            };
+            parameters.Add(parameterId);
+
+            var parameterDocument = new SqlParameter("@document", System.Data.SqlDbType.VarChar)
+            {
+                Value = document
+            };
+            parameters.Add(parameterDocument);
+
+            return await this.sqlDriver.CountByPrecedure<T>("sp_CountUserByIdAndDocument", parameters);
+        }
+
+        public async Task<T> FindByDocumentAndPassword<T>(string document, string password)
+        {
+            List<DbParameter> parameters = new List<DbParameter>();
+            var parameterDocument = new SqlParameter("@document", System.Data.SqlDbType.VarChar)
+            {
+                Value = document
+            };
+            parameters.Add(parameterDocument);
+
+            var parameterPass = new SqlParameter("@password", System.Data.SqlDbType.VarChar)
+            {
+                Value = password
+            };
+            parameters.Add(parameterPass);
+
+            var entity = await this.sqlDriver.OneByPrecedure<T>("sp_findUserByDocumentAndPassword", parameters);
+            return entity;
         }
     }
 }
