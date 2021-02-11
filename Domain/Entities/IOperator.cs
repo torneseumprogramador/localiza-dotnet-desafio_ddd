@@ -1,6 +1,6 @@
 using System;
 
-namespace Infrastructure.Entities
+namespace Domain.Entities
 {
     public interface IOperator
     {
