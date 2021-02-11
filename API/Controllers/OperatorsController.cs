@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Domain.ViewModel;
 using Domain.Entities;
 using Domain.UseCase.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Services.Person;
 using Infrastructure.Services;
-using API.Authentication;
 
 namespace api.Controllers
 {
@@ -28,9 +26,9 @@ namespace api.Controllers
         [HttpGet]
         [Route("/operators")]
         [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<OperatorView>> Index()
+        public async Task<ICollection<Operator>> Index()
         {
-            return await _userService.All<OperatorView>(PersonRole.Operator);
+            return await _userService.All<Operator>(PersonRole.Operator);
         }
 
         [HttpPost]

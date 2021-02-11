@@ -1,11 +1,11 @@
 
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using Domain.Entities;
-using Infrastructure.Database;
 
 namespace Domain.ViewModel
 {
-    [Table(Name = "Users")]
+    [Table("Users")]
     public record UserView
     {
         public int Id { get; set; }

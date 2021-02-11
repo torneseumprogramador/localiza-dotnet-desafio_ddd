@@ -26,10 +26,9 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/users/login")]
-        [Route("/operators/login")]
+        [Route("/person/login")]
         [AllowAnonymous]
-        public async Task<ActionResult> Login(UserLogin userLogin)
+        public async Task<ActionResult> Login(PersonLogin userLogin)
         {  
             try
             {
@@ -38,6 +37,42 @@ namespace api.Controllers
             catch (EntityNotFound err)
             {
                 return StatusCode(401, new {
+                    Message = err.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("/users/login")]
+        [AllowAnonymous]
+        public async Task<ActionResult> UserLogin(UserLogin userLogin)
+        {
+            try
+            {
+                return StatusCode(200, await _userService.Login(userLogin, new Token()));
+            }
+            catch (EntityNotFound err)
+            {
+                return StatusCode(401, new
+                {
+                    Message = err.Message
+                });
+            }
+        }
+
+        [HttpPost]
+        [Route("/operator/login")]
+        [AllowAnonymous]
+        public async Task<ActionResult> OperatorLogin(OperatorLogin userLogin)
+        {
+            try
+            {
+                return StatusCode(200, await _userService.Login(userLogin, new Token()));
+            }
+            catch (EntityNotFound err)
+            {
+                return StatusCode(401, new
+                {
                     Message = err.Message
                 });
             }

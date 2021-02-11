@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Data;
 using System.Data.SqlClient;
 using System.Reflection;
@@ -25,7 +27,7 @@ namespace Infrastructure.Database
 
             foreach (var field in fields)
             {
-                var persistedField = field.GetCustomAttribute<DbFieldAttribute>();
+                var persistedField = field.GetCustomAttribute<ColumnAttribute>();
                 if (persistedField != null)
                 {
                     if (field.GetValue(entity) != null)
@@ -53,7 +55,7 @@ namespace Infrastructure.Database
             var fields = entity.GetType().GetProperties();
             foreach (var field in fields)
             {
-                var pkAttr = field.GetCustomAttribute<PkAttribute>();
+                var pkAttr = field.GetCustomAttribute<KeyAttribute>();
                 if (pkAttr != null)
                 {
                     field.SetValue(entity, id);
@@ -80,10 +82,10 @@ namespace Infrastructure.Database
             PropertyInfo pkProperty = null;
             foreach (var field in fields)
             {
-                var pkAttr = field.GetCustomAttribute<PkAttribute>();
+                var pkAttr = field.GetCustomAttribute<KeyAttribute>();
                 if (pkAttr != null) pkProperty = field;
 
-                var persistedField = field.GetCustomAttribute<DbFieldAttribute>();
+                var persistedField = field.GetCustomAttribute<ColumnAttribute>();
                 if (persistedField != null)
                 {
                     var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
@@ -96,9 +98,10 @@ namespace Infrastructure.Database
 
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
-            var pk = pkProperty.GetCustomAttribute<PkAttribute>();
+            var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
+            var columnName = (cAttr != null) ? cAttr.Name : pkProperty.Name;
 
-            sql += $" where {pk.Name}=@{pk.Name}";
+            sql += $" where {columnName}=@{columnName}";
 
             return sql;
         }
@@ -134,7 +137,7 @@ namespace Infrastructure.Database
             PropertyInfo pkProperty = null;
             foreach (var field in fields)
             {
-                var pkAttr = field.GetCustomAttribute<PkAttribute>();
+                var pkAttr = field.GetCustomAttribute<KeyAttribute>();
                 if (pkAttr != null)
                 {
                     pkProperty = field;
@@ -144,9 +147,10 @@ namespace Infrastructure.Database
 
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
-            var pk = pkProperty.GetCustomAttribute<PkAttribute>();
             var value = Convert.ToInt32(pkProperty.GetValue(entity));
-            sql += $" where {pk.Name}={value}";
+            var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
+            var columnName = (cAttr != null) ? cAttr.Name : pkProperty.Name;
+            sql += $" where {columnName}={columnName}";
 
             return sql;
         }
@@ -167,7 +171,7 @@ namespace Infrastructure.Database
             PropertyInfo pkProperty = null;
             foreach (var field in fields)
             {
-                var pkAttr = field.GetCustomAttribute<PkAttribute>();
+                var pkAttr = field.GetCustomAttribute<KeyAttribute>();
                 if (pkAttr != null)
                 {
                     pkProperty = field;
@@ -177,9 +181,10 @@ namespace Infrastructure.Database
 
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
-            var pk = pkProperty.GetCustomAttribute<PkAttribute>();
             var value = Convert.ToInt32(pkProperty.GetValue(entity));
-            sql += $" where {pk.Name}={value}";
+            var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
+            var columnName = (cAttr != null) ? cAttr.Name : pkProperty.Name;
+            sql += $" where {columnName}={columnName}";
 
             return sql;
         }
@@ -261,20 +266,22 @@ namespace Infrastructure.Database
 
             foreach (var field in fields)
             {
+                var pkField = field.GetCustomAttribute<KeyAttribute>();
                 if (includePk)
                 {
-                    var pkField = field.GetCustomAttribute<PkAttribute>();
                     if (pkField != null)
                     {
-                        var nameField = string.IsNullOrEmpty(pkField.Name) ? field.Name : pkField.Name;
+                        var cAttr = field.GetCustomAttribute<ColumnAttribute>();
+                        var nameField = (cAttr != null) ? cAttr.Name : field.Name;
+
                         var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);
                         if (parameter != null)
                             parameters.Add(parameter);
                     }
                 }
 
-                var persistedField = field.GetCustomAttribute<DbFieldAttribute>();
-                if (persistedField != null)
+                var persistedField = field.GetCustomAttribute<ColumnAttribute>();
+                if (persistedField != null && pkField == null)
                 {
                     var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                     var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);

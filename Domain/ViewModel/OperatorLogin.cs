@@ -2,9 +2,9 @@ using System;
 
 namespace Domain.ViewModel
 {
-    public record UserLogin
+    public record OperatorLogin
     {
-      public string CPF {get;set;}        
+      public string Registration { get;set;}        
       public string Password {get;set;}        
     }
 }

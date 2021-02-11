@@ -1,15 +1,15 @@
-﻿using System;
+﻿
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Domain.ViewModel;
 using Domain.Entities;
 using Domain.UseCase.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Services.Person;
 using Infrastructure.Services;
-using API.Authentication;
 
 namespace api.Controllers
 {
@@ -28,9 +28,9 @@ namespace api.Controllers
         [HttpGet]
         [Route("/users")]
         [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<UserView>> Index()
+        public async Task<ICollection<User>> Index()
         {
-            return await _userService.All<UserView>(PersonRole.User);
+            return await _userService.All<User>(PersonRole.User);
         }
 
         [HttpPost]
@@ -43,9 +43,10 @@ namespace api.Controllers
                 await _userService.Save(user);
                 return StatusCode(201);
             }
-            catch(EntityUniq err)
+            catch (EntityUniq err)
             {
-                return StatusCode(401, new {
+                return StatusCode(401, new
+                {
                     Message = err.Message
                 });
             }
@@ -62,9 +63,10 @@ namespace api.Controllers
                 await _userService.Save(user);
                 return StatusCode(204);
             }
-            catch(EntityUniq err)
+            catch (EntityUniq err)
             {
-                return StatusCode(401, new {
+                return StatusCode(401, new
+                {
                     Message = err.Message
                 });
             }
@@ -80,15 +82,17 @@ namespace api.Controllers
                 await _userService.Delete(id);
                 return StatusCode(204);
             }
-            catch(EntityEmptyId err)
+            catch (EntityEmptyId err)
             {
-                return StatusCode(401, new {
+                return StatusCode(401, new
+                {
                     Message = err.Message
                 });
             }
-            catch(EntityNotFound err)
+            catch (EntityNotFound err)
             {
-                return StatusCode(404, new {
+                return StatusCode(404, new
+                {
                     Message = err.Message
                 });
             }

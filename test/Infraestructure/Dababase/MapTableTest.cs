@@ -2,18 +2,22 @@
 using NUnit.Framework;
 using System.Data;
 using Infrastructure.Database;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Test.Infrastructure.Database
 {
     public class Customer
     {
-        [Pk(Name = "id")]
+        [Key]
+        [Column("id")]
         public int Id {get;set;}
-        [DbField(Name = "name")]
-        public string Name {get;set;}
 
-        [DbField(Name = "phone")]
-        public string Phone {get;set;}
+        [Column("name")]
+        public string Name { get;set;}
+
+        [Column("phone")]
+        public string Phone { get;set;}
     }
     
     public class MapTableTest

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Domain.Authentication;
 using Domain.Entities;
 using Domain.ViewModel;
+using Domain.ViewModel.Jwt;
 using Infrastructure.Services;
 using Infrastructure.Services.Person;
 
@@ -26,6 +27,8 @@ namespace Domain.UseCase.UserServices
             {
                 var size = await personRepository.CountByIdAndDocument<IPerson>(person.Id, person.Document, person.Type);
                 if (size > 0) throw new EntityUniq("Documento já cadastrado");
+
+
             }
             else
             {
@@ -42,19 +45,47 @@ namespace Domain.UseCase.UserServices
             await entityRepository.Delete<IPerson>(id);
         }
 
-        public async Task<UserJwt> Login(UserLogin userLogin, IToken token)
+        public async Task<PersonJwt> Login(PersonLogin personLogin, IToken token)
         {
             IPerson loggedPerson;
-            if (userLogin.Document.Length >= 11)
-                loggedPerson = await personRepository.FindByDocumentAndPassword<User>(userLogin.Document, userLogin.Password, Convert.ToInt16(PersonRole.User));
-            else loggedPerson = await personRepository.FindByDocumentAndPassword<Operator>(userLogin.Document, userLogin.Password, Convert.ToInt16(PersonRole.Operator));
+            if (personLogin.Document.Length >= 11)
+                loggedPerson = await personRepository.FindByDocumentAndPassword<User>(personLogin.Document, personLogin.Password, Convert.ToInt16(PersonRole.User));
+            else loggedPerson = await personRepository.FindByDocumentAndPassword<Operator>(personLogin.Document, personLogin.Password, Convert.ToInt16(PersonRole.Operator));
 
+            if (loggedPerson == null) throw new EntityNotFound("Documento e senha inválidos");
+            return new PersonJwt()
+            {
+                Id = loggedPerson.Id,
+                Name = loggedPerson.Name,
+                Document = loggedPerson.Document,
+                Role = loggedPerson.Role.ToString(),
+                Token = token.GerarToken(loggedPerson)
+            };
+        }
+
+        public async Task<OperatorJwt> Login(OperatorLogin userLogin, IToken token)
+        {
+            IPerson loggedPerson = await personRepository.FindByDocumentAndPassword<Operator>(userLogin.Registration, userLogin.Password, Convert.ToInt16(PersonRole.Operator));
+            if (loggedPerson == null) throw new EntityNotFound("Documento e senha inválidos");
+            return new OperatorJwt()
+            {
+                Id = loggedPerson.Id,
+                Name = loggedPerson.Name,
+                Registration = loggedPerson.Document,
+                Role = loggedPerson.Role.ToString(),
+                Token = token.GerarToken(loggedPerson)
+            };
+        }
+
+        public async Task<UserJwt> Login(UserLogin userLogin, IToken token)
+        {
+            IPerson loggedPerson = await personRepository.FindByDocumentAndPassword<User>(userLogin.CPF, userLogin.Password, Convert.ToInt16(PersonRole.User));
             if (loggedPerson == null) throw new EntityNotFound("Documento e senha inválidos");
             return new UserJwt()
             {
                 Id = loggedPerson.Id,
                 Name = loggedPerson.Name,
-                Document = loggedPerson.Document,
+                CPF = loggedPerson.Document,
                 Role = loggedPerson.Role.ToString(),
                 Token = token.GerarToken(loggedPerson)
             };

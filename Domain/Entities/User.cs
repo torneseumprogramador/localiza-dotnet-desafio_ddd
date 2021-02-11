@@ -1,32 +1,55 @@
 using System;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using Infrastructure.Database;
 
 namespace Domain.Entities
 {
-    [Table(Name = "users")]
+    //[Table(Name = "users")]
+	[Table("users")]
 	public class User : IPerson, IUser
 	{
-		[Pk]
+		[Key]
+		[Column]
 		public int Id { get; set; }
-		[DbField]
+
+		[Required]
+		[Column]
 		public string Name { get; set; }
-		[DbField]
+
+		[Required]
+		[Column]
+		[JsonIgnore]
 		public string Document { get; set; }
-		[DbField]
+
+		[Required]
+		[Column]
 		public string Password { get; set; }
-		[DbField]
+
+		[JsonIgnore]
+		[Column]
 		public int Type { get; set; }
-		[DbField]
+
+		[Required]
+		[Column]
 		public DateTime Birthday { get; set; }
-		[DbField]
+
+		[Column]
+		[JsonIgnore]
 		public int IdAddress { get; set; }
 
+		[Required]
 		public string CPF
 		{
 			get
 			{
 				return this.Document;
 			}
+            set
+            {
+				this.Document = value;
+            }
 		}
 
 		public PersonRole Role

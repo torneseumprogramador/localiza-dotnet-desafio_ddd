@@ -9,6 +9,7 @@
     <Folder Include="ViewModel\" />
     <Folder Include="UseCase\UserServices\" />
     <Folder Include="Authentication\" />
+    <Folder Include="ViewModel\Jwt\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>

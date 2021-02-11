@@ -7,7 +7,7 @@ using Infrastructure.Database;
 namespace Domain.Entities
 {
     [Table("users")]
-    public class Operator : IPerson, IOperator
+    public class Person : IPerson
     {
         [Key]
         [Column]
@@ -18,36 +18,17 @@ namespace Domain.Entities
         public string Name { get; set; }
 
         [Column]
-		[JsonIgnore]
+		[Required]
         public string Document { get; set; }
 
         [Column]
-		[JsonIgnore]
+		[Required]
         public int Type { get; set; }
 
         [Column]
 		[Required]
         public string Password { get; set; }
 
-		[Required]
-        public string Registration
-        {
-            get
-            {
-                return this.Document;
-            }
-            set
-            {
-                this.Document = value;
-            }
-        }
-
-        public PersonRole Role
-        {
-            get
-            {
-                return PersonRole.Operator;
-            }
-        }
+        public PersonRole Role { get { return (PersonRole)Enum.ToObject(typeof(PersonRole), this.Type); } }
     }
 }
