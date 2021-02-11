@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Reflection;
 
 namespace Infrastructure.Database
@@ -29,7 +30,7 @@ namespace Infrastructure.Database
             {
                 if(field.GetValue(dado) != null)
                 {
-                    var nameField = string.IsNullOrEmpty(persistedField.ColumnName) ? field.Name : persistedField.ColumnName;
+                    var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                     colsDb.Add(nameField);
                     colsDbParameter.Add($"@{nameField}");
                 }
@@ -69,7 +70,7 @@ namespace Infrastructure.Database
             var persistedField = field.GetCustomAttribute<FieldsAttribute>();
             if (persistedField != null)
             {
-                var nameField = string.IsNullOrEmpty(persistedField.ColumnName) ? field.Name : persistedField.ColumnName;
+                var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                 if(field.GetValue(dado) != null)
                     colsDb.Add($"{nameField}=@{nameField}");
             }
@@ -233,7 +234,7 @@ namespace Infrastructure.Database
                 var persistedField = field.GetCustomAttribute<FieldsAttribute>();
                 if (persistedField != null)
                 {
-                    var nameField = string.IsNullOrEmpty(persistedField.ColumnName) ? field.Name : persistedField.ColumnName;
+                    var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                     var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);
                     if(parameter != null)
                         parameters.Add(parameter);

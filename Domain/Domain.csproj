@@ -4,6 +4,12 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="UseCase\" />
+    <Folder Include="ViewModel\" />
+    <Folder Include="UseCase\UserServices\" />
+    <Folder Include="Authentication\" />
+  </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>

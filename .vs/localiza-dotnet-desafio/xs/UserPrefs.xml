@@ -4,13 +4,23 @@
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="localiza-dotnet-desafio" expanded="True">
-            <Node name="API" expanded="True" />
+            <Node name="API" expanded="True">
+              <Node name="Authentication" expanded="True" />
+            </Node>
+            <Node name="Domain" expanded="True">
+              <Node name="Authentication" expanded="True">
+                <Node name="IToken.cs" selected="True" />
+              </Node>
+              <Node name="Entities" expanded="True" />
+              <Node name="UseCase" expanded="True" />
+              <Node name="ViewModel" expanded="True" />
+            </Node>
             <Node name="Infrastructure" expanded="True">
               <Node name="Database" expanded="True" />
             </Node>
             <Node name="Test" expanded="True">
               <Node name="Infraestructure" expanded="True">
-                <Node name="Dababase" expanded="True" selected="True" />
+                <Node name="Dababase" expanded="True" />
               </Node>
             </Node>
           </Node>

@@ -4,6 +4,6 @@ namespace Domain.Entities
 {
     public interface IOperator
     {
-        string Registration {get; set;}
+        string Registration { get; }
     }
 }
