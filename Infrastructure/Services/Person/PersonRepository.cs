@@ -49,7 +49,7 @@ namespace Infrastructure.Services.Person
             };
             parameters.Add(parameterDocument);
 
-            return await this.sqlDriver.CountByPrecedure<T>("sp_CountUserByIdAndDocument", parameters);
+            return await this.sqlDriver.CountByPrecedure<T>("sp_CountUserByDifferentIdAndDocument", parameters);
         }
 
         public async Task<T> FindByDocumentAndPassword<T>(string document, string password)

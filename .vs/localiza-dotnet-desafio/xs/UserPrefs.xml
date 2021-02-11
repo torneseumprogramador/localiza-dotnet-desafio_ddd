@@ -1,8 +1,5 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/Services/Person/PersonRepository.cs">
-    <Files>
-      <File FileName="Infrastructure/Services/Person/PersonRepository.cs" Line="41" Column="27" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">

@@ -57,7 +57,7 @@ namespace Domain.UseCase.UserServices
 
         public async Task<ICollection<UserView>> All()
         {
-           return await personRepository.All<UserView>();
+           return await entityRepository.All<UserView>();
         }
     }
 }
