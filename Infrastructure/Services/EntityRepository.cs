@@ -1,38 +1,48 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Infrastructure.Database;
 
 namespace Infrastructure.Services
 {
     public class EntityRepository : IEntityRepository
     {
-        public Task<ICollection<T>> All<T>()
+        public EntityRepository()
         {
-            throw new System.NotImplementedException();
+            this.sqlDriver = new SqlDriver();
         }
 
-        public Task Delete<T>(int id)
+        public SqlDriver sqlDriver;
+
+        public async Task<ICollection<T>> All<T>()
         {
-            throw new System.NotImplementedException();
+            return await this.sqlDriver.All<T>();
         }
 
-        public Task Delete<T>(T entity)
+        public async Task Delete<T>(int id)
         {
-            throw new System.NotImplementedException();
+            var instance = MapTable.CreateInstanceAndSetId<T>(id);
+            await this.sqlDriver.Delete<T>(instance);
         }
 
-        public Task<T> FindById<T>(int id)
+        public async Task Delete<T>(T entity)
         {
-            throw new System.NotImplementedException();
+            await this.sqlDriver.Delete(entity);
         }
 
-        public Task Save<T>(T entity)
+        public async Task<T> FindById<T>(int id)
         {
-            throw new System.NotImplementedException();
+            return await this.sqlDriver.FindById<T>(id);
         }
 
-        public Task Update<T>(T entity)
+        public async Task Save<T>(T entity)
         {
-            throw new System.NotImplementedException();
+            await this.sqlDriver.Save(entity);
+        }
+
+        public async Task Update<T>(T entity)
+        {
+            await this.sqlDriver.Update(entity);
         }
     }
 }

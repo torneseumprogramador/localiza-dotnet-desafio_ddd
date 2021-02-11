@@ -2,12 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Threading.Tasks;
 
 namespace Infrastructure.Database
 {
-    public class SqlConnectionDatabase<T> : IDatabase<T> where T : class
+    public class SqlDriver
     {
-        public SqlConnectionDatabase()
+        public SqlDriver()
         {
             string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
             this.connectionString = cnn;
@@ -15,9 +16,8 @@ namespace Infrastructure.Database
 
         private string connectionString;
 
-        public void Save(T obj)
+        public async Task Save<T>(T obj)
         {
-
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 var queryString = MapTable.BuilderInsert(obj);
@@ -28,10 +28,11 @@ namespace Infrastructure.Database
                     command.Parameters.Add(parameter);
                 }
                 command.Connection.Open();
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
-        public void Update(T obj)
+
+        public async Task Update<T>(T obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -43,7 +44,7 @@ namespace Infrastructure.Database
                     command.Parameters.Add(parameter);
                 }
                 command.Connection.Open();
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
 
@@ -57,7 +58,7 @@ namespace Infrastructure.Database
             }
         }
 
-        public List<T> All(string SqlWhere = null)
+        public async Task<ICollection<T>> All<T>(string SqlWhere = null)
         {
             var list = new List<T>();
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -69,7 +70,7 @@ namespace Infrastructure.Database
 
                 using (SqlDataReader dr = command.ExecuteReader())
                 {
-                    while (dr.Read())
+                    while (await dr.ReadAsync())
                     {
                         var instance = Activator.CreateInstance(typeof(T));
                         this.fill(instance, dr);
@@ -81,7 +82,7 @@ namespace Infrastructure.Database
             return list;
         }
 
-        public List<T> AllByPrecedure(string queryString, List<DbParameter> parameters = null)
+        public List<T> AllByPrecedure<T>(string queryString, List<DbParameter> parameters = null)
         {
             var list = new List<T>();
             using (SqlConnection connection = new SqlConnection(connectionString))
@@ -121,14 +122,35 @@ namespace Infrastructure.Database
                 catch { }
             }
         }
-        public void Remove(T obj)
+
+        public async Task<T> FindById<T>(int id)
+        {
+            var instance = Activator.CreateInstance(typeof(T));
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                var queryString = MapTable.BuildFindById(instance);
+                SqlCommand command = new SqlCommand(queryString, connection);
+                command.Connection.Open();
+                using (SqlDataReader dr = command.ExecuteReader())
+                {
+                    while (await dr.ReadAsync())
+                    {
+                        this.fill(instance, dr);
+                        break;
+                    }
+                }
+            }
+            return (T)instance;
+        }
+
+        public async Task Delete<T>(T obj)
         {
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 var queryString = MapTable.BuilderDelete(obj);
                 SqlCommand command = new SqlCommand(queryString, connection);
                 command.Connection.Open();
-                command.ExecuteNonQuery();
+                await command.ExecuteNonQueryAsync();
             }
         }
     }
