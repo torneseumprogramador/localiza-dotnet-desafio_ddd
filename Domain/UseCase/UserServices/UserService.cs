@@ -5,6 +5,7 @@ using Domain.Authentication;
 using Domain.Entities;
 using Domain.ViewModel;
 using Infrastructure.Services;
+using Infrastructure.Services.Person;
 
 namespace Domain.UseCase.UserServices
 {

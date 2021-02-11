@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Domain.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -19,9 +18,11 @@ namespace API.Controllers
         }
 
         [HttpGet]
-        public string Get()
+        [Route("/")]
+        [AllowAnonymous]
+        public Welcome Index()
         {
-            return "Bem vindo";
+            return new Welcome();
         }
     }
 }

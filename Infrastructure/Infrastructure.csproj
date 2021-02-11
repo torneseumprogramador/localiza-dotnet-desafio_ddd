@@ -11,5 +11,6 @@
   <ItemGroup>
     <Folder Include="Database\" />
     <Folder Include="Services\" />
+    <Folder Include="Services\Person\" />
   </ItemGroup>
 </Project>

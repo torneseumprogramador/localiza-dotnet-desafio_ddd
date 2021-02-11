@@ -8,146 +8,144 @@ namespace Infrastructure.Database
 {
     public class MapTable
     {
-    public static string BuilderInsert<T>(T dado)
-    {
-        var nome = $"{dado.GetType().Name.ToLower()}s";
-        var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
-        if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
+        public static string BuilderInsert<T>(T dado)
         {
-            nome = tabela.Name;
-        }
-
-        var fields = dado.GetType().GetProperties();
-
-        var sql = $"insert into {nome} (";
-        List<string> colsDb = new List<string>();
-        List<string> colsDbParameter = new List<string>();
-
-        foreach (var field in fields)
-        {
-            var persistedField = field.GetCustomAttribute<FieldsAttribute>();
-            if (persistedField != null)
+            var nome = $"{dado.GetType().Name.ToLower()}s";
+            var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
+            if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
             {
-                if(field.GetValue(dado) != null)
+                nome = tabela.Name;
+            }
+
+            var fields = dado.GetType().GetProperties();
+
+            var sql = $"insert into {nome} (";
+            List<string> colsDb = new List<string>();
+            List<string> colsDbParameter = new List<string>();
+
+            foreach (var field in fields)
+            {
+                var persistedField = field.GetCustomAttribute<FieldsAttribute>();
+                if (persistedField != null)
                 {
-                    var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
-                    colsDb.Add(nameField);
-                    colsDbParameter.Add($"@{nameField}");
+                    if (field.GetValue(dado) != null)
+                    {
+                        var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
+                        colsDb.Add(nameField);
+                        colsDbParameter.Add($"@{nameField}");
+                    }
                 }
             }
+
+            sql += string.Join(",", colsDb.ToArray());
+
+            sql += ") values (";
+
+            sql += string.Join(",", colsDbParameter.ToArray());
+            sql += ")";
+
+            return sql;
         }
 
-        sql += string.Join(",", colsDb.ToArray());
-
-        sql += ") values (";
-
-        sql += string.Join(",", colsDbParameter.ToArray());
-        sql += ")";
-
-        return sql;
-    }
-
-    public static string BuilderUpdate<T>(T dado)
-    {
-        var nome = $"{dado.GetType().Name.ToLower()}s";
-        var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
-        if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
+        public static string BuilderUpdate<T>(T dado)
         {
-            nome = tabela.Name;
-        }
-
-        var fields = dado.GetType().GetProperties();
-
-        var sql = $"update {nome} set ";
-        List<string> colsDb = new List<string>();
-
-        PropertyInfo pkProperty = null;
-        foreach (var field in fields)
-        {
-            var pkAttr = field.GetCustomAttribute<PkAttribute>();
-            if (pkAttr != null) pkProperty = field;
-
-            var persistedField = field.GetCustomAttribute<FieldsAttribute>();
-            if (persistedField != null)
+            var nome = $"{dado.GetType().Name.ToLower()}s";
+            var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
+            if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
             {
-                var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
-                if(field.GetValue(dado) != null)
-                    colsDb.Add($"{nameField}=@{nameField}");
+                nome = tabela.Name;
             }
-        }
 
-        sql += string.Join(",", colsDb.ToArray());
+            var fields = dado.GetType().GetProperties();
 
-        if(pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
-        
-        var pk = pkProperty.GetCustomAttribute<PkAttribute>();
+            var sql = $"update {nome} set ";
+            List<string> colsDb = new List<string>();
 
-        sql += $" where {pk.Name}=@{pk.Name}";
-
-        return sql;
-    }
-
-    public static string BuilderSelect<T>(string sqlWhere = null)
-    {
-        var dado = Activator.CreateInstance<T>();
-        var nome = $"{dado.GetType().Name.ToLower()}s";
-        var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
-        if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
-        {
-            nome = tabela.Name;
-        }
-        if(!string.IsNullOrEmpty(sqlWhere)) sqlWhere = $" {sqlWhere}";
-
-        return $"select {nome}.* from {nome}{sqlWhere}";
-    }
-
-    public static string BuilderDelete<T>(T dado)
-    {
-        var nome = $"{dado.GetType().Name.ToLower()}s";
-        var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
-        if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
-        {
-            nome = tabela.Name;
-        }
-
-        var fields = dado.GetType().GetProperties();
-
-        var sql = $"delete from {nome}";
-        List<string> colsDb = new List<string>();
-
-        PropertyInfo pkProperty = null;
-        foreach (var field in fields)
-        {
-            var pkAttr = field.GetCustomAttribute<PkAttribute>();
-            if (pkAttr != null)
+            PropertyInfo pkProperty = null;
+            foreach (var field in fields)
             {
-                pkProperty = field;
-                break;
+                var pkAttr = field.GetCustomAttribute<PkAttribute>();
+                if (pkAttr != null) pkProperty = field;
+
+                var persistedField = field.GetCustomAttribute<FieldsAttribute>();
+                if (persistedField != null)
+                {
+                    var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
+                    if (field.GetValue(dado) != null)
+                        colsDb.Add($"{nameField}=@{nameField}");
+                }
             }
+
+            sql += string.Join(",", colsDb.ToArray());
+
+            if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
+
+            var pk = pkProperty.GetCustomAttribute<PkAttribute>();
+
+            sql += $" where {pk.Name}=@{pk.Name}";
+
+            return sql;
         }
 
-        if(pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
-        
-        var pk = pkProperty.GetCustomAttribute<PkAttribute>();
-        var value = Convert.ToInt32(pkProperty.GetValue(dado));
-        sql += $" where {pk.Name}={value}";
-
-        return sql;
-    }
-    public static SqlParameter GetBuilderValue<T>(T obj, string sqlParameter, string objPropriety)
-    {
-        var value = obj.GetType().GetProperty(objPropriety).GetValue(obj);
-        if(value == null) return null;
-        var param = new SqlParameter(sqlParameter, GetDbType(value));
-        param.Value = value;
-        return param;
-    }
-
-    private static SqlDbType GetDbType(object value)
-    {
-        var result = SqlDbType.VarChar;
-        try
+        public static string BuilderSelect<T>(string sqlWhere = null)
         {
+            var dado = Activator.CreateInstance<T>();
+            var nome = $"{dado.GetType().Name.ToLower()}s";
+            var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
+            if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
+            {
+                nome = tabela.Name;
+            }
+            if (!string.IsNullOrEmpty(sqlWhere)) sqlWhere = $" {sqlWhere}";
+
+            return $"select {nome}.* from {nome}{sqlWhere}";
+        }
+
+        public static string BuilderDelete<T>(T dado)
+        {
+            var nome = $"{dado.GetType().Name.ToLower()}s";
+            var tabela = dado.GetType().GetCustomAttribute<TableAttribute>();
+            if (tabela != null && !string.IsNullOrEmpty(tabela.Name))
+            {
+                nome = tabela.Name;
+            }
+
+            var fields = dado.GetType().GetProperties();
+
+            var sql = $"delete from {nome}";
+            List<string> colsDb = new List<string>();
+
+            PropertyInfo pkProperty = null;
+            foreach (var field in fields)
+            {
+                var pkAttr = field.GetCustomAttribute<PkAttribute>();
+                if (pkAttr != null)
+                {
+                    pkProperty = field;
+                    break;
+                }
+            }
+
+            if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
+
+            var pk = pkProperty.GetCustomAttribute<PkAttribute>();
+            var value = Convert.ToInt32(pkProperty.GetValue(dado));
+            sql += $" where {pk.Name}={value}";
+
+            return sql;
+        }
+        public static SqlParameter GetBuilderValue<T>(T obj, string sqlParameter, string objPropriety)
+        {
+            var value = obj.GetType().GetProperty(objPropriety).GetValue(obj);
+            if (value == null) return null;
+            var param = new SqlParameter(sqlParameter, GetDbType(value));
+            param.Value = value;
+            return param;
+        }
+
+        private static SqlDbType GetDbType(object value)
+        {
+            var result = SqlDbType.VarChar;
             Type type = value.GetType();
 
             switch (Type.GetTypeCode(type))
@@ -202,16 +200,10 @@ namespace Infrastructure.Database
                     break;
             }
 
-        }
-        catch (Exception ex)
-        {
-            throw (ex);
+            return result;
         }
 
-        return result;
-    }
-
-    public static List<SqlParameter> BuilderParameters<T>(T obj, bool includePk = false)
+        public static List<SqlParameter> BuilderParameters<T>(T obj, bool includePk = false)
         {
             var fields = obj.GetType().GetProperties();
 
@@ -219,14 +211,14 @@ namespace Infrastructure.Database
 
             foreach (var field in fields)
             {
-                if(includePk)
+                if (includePk)
                 {
                     var pkField = field.GetCustomAttribute<PkAttribute>();
                     if (pkField != null)
                     {
                         var nameField = string.IsNullOrEmpty(pkField.Name) ? field.Name : pkField.Name;
                         var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);
-                        if(parameter != null)
+                        if (parameter != null)
                             parameters.Add(parameter);
                     }
                 }
@@ -236,7 +228,7 @@ namespace Infrastructure.Database
                 {
                     var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                     var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);
-                    if(parameter != null)
+                    if (parameter != null)
                         parameters.Add(parameter);
                 }
             }
