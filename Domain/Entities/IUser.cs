@@ -6,6 +6,6 @@ namespace Domain.Entities
     {
         string CPF { get; }
         DateTime Birthday { get; set;}
-        int IdAddress {get; set;}
+        int? IdAddress {get; set;}
     }
 }

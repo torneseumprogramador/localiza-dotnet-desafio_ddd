@@ -11,25 +11,27 @@ namespace Domain.Entities
     {
         [Key]
         [Column]
-        public int Id { get; set; }
+        public virtual int Id { get; set; }
 
         [Column]
 		[Required]
-        public string Name { get; set; }
+        public virtual string Name { get; set; }
 
         [Column]
 		[Required]
-        public string Document { get; set; }
+        public virtual string Document { get; set; }
 
         [Column]
 		[Required]
-        public int Type { get; set; }
+        public virtual int Type { get; set; }
 
         [Column]
 		[Required]
-        public string Password { get; set; }
+        public virtual string Password { get; set; }
 
-		[JsonIgnore]
-        public PersonRole Role { get { return (PersonRole)Enum.ToObject(typeof(PersonRole), this.Type); } }
+        [Column]
+        public virtual int? IdAddress { get; set; }
+
+        public virtual PersonRole Role { get { return (PersonRole)Enum.ToObject(typeof(PersonRole), this.Type); } }
     }
 }

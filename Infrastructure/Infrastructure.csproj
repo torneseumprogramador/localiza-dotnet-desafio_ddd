@@ -12,5 +12,6 @@
     <Folder Include="Database\" />
     <Folder Include="Services\" />
     <Folder Include="Services\Person\" />
+    <Folder Include="Services\Exceptions\" />
   </ItemGroup>
 </Project>

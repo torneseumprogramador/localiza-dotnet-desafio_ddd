@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Infrastructure.Services;
+using Infrastructure.Services.Exceptions;
 
 namespace Domain.UseCase.UserServices
 {

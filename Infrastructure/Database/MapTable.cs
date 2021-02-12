@@ -28,9 +28,10 @@ namespace Infrastructure.Database
             foreach (var field in fields)
             {
                 var persistedField = field.GetCustomAttribute<ColumnAttribute>();
+                var pkField = field.GetCustomAttribute<KeyAttribute>();
                 if (persistedField != null)
                 {
-                    if (field.GetValue(entity) != null)
+                    if (field.GetValue(entity) != null && pkField == null)
                     {
                         var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                         colsDb.Add(nameField);
@@ -86,7 +87,8 @@ namespace Infrastructure.Database
                 if (pkAttr != null) pkProperty = field;
 
                 var persistedField = field.GetCustomAttribute<ColumnAttribute>();
-                if (persistedField != null)
+                var pkField = field.GetCustomAttribute<KeyAttribute>();
+                if (persistedField != null && pkField == null)
                 {
                     var nameField = string.IsNullOrEmpty(persistedField.Name) ? field.Name : persistedField.Name;
                     if (field.GetValue(entity) != null)

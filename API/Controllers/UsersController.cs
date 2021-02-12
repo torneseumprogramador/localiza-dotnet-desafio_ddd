@@ -10,6 +10,9 @@ using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Services.Person;
 using Infrastructure.Services;
 using Domain.UseCase.PersonServices;
+using Domain.ViewModel;
+using Domain.UseCase.Builders;
+using Infrastructure.Services.Exceptions;
 
 namespace api.Controllers
 {
@@ -36,8 +39,9 @@ namespace api.Controllers
         [HttpPost]
         [Route("/users")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Create([FromBody] User user)
+        public async Task<IActionResult> Create([FromBody] UserSave userSave)
         {
+            var user = EntityBuilder.Call<User>(userSave);
             try
             {
                 await _personService.Save(user);
@@ -55,8 +59,9 @@ namespace api.Controllers
         [HttpPut]
         [Route("/users/{id}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Update(int id, [FromBody] User user)
+        public async Task<IActionResult> Update(int id, [FromBody] UserSave userSave)
         {
+            var user = EntityBuilder.Call<User>(userSave);
             user.Id = id;
             try
             {

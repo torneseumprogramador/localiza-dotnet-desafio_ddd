@@ -8,6 +8,7 @@ using Infrastructure.Services.Person;
 using Infrastructure.Services;
 using API.Authentication;
 using Domain.UseCase.PersonServices;
+using Infrastructure.Services.Exceptions;
 
 namespace api.Controllers
 {

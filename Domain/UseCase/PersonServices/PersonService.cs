@@ -6,6 +6,7 @@ using Domain.Entities;
 using Domain.ViewModel;
 using Domain.ViewModel.Jwt;
 using Infrastructure.Services;
+using Infrastructure.Services.Exceptions;
 using Infrastructure.Services.Person;
 
 namespace Domain.UseCase.PersonServices

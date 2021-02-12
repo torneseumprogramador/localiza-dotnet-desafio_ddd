@@ -6,36 +6,25 @@ using System.Text.Json.Serialization;
 namespace Domain.Entities
 {
 	[Table("users")]
-	public class User : IPerson, IUser
+	public class User : Person, IUser
 	{
-		[Key]
-		[Column]
-		public int Id { get; set; }
-
-		[Required]
-		[Column]
-		public string Name { get; set; }
-
-		[Required]
 		[Column]
 		[JsonIgnore]
-		public string Document { get; set; }
-
-		[Required]
-		[Column]
-		public string Password { get; set; }
+		public override string Document { get; set; }
 
 		[JsonIgnore]
 		[Column]
-		public int Type { get; set; }
+		public override int Type { get; set; }
 
-		[Required]
 		[Column]
 		public DateTime Birthday { get; set; }
 
 		[Column]
 		[JsonIgnore]
-		public int IdAddress { get; set; }
+		public override int? IdAddress { get; set; }
+
+		[Column]
+		public Address Address { get; set; }
 
 		[Required]
 		public string CPF
@@ -50,7 +39,7 @@ namespace Domain.Entities
             }
 		}
 
-		public PersonRole Role
+		public override PersonRole Role
 		{
 			get
 			{

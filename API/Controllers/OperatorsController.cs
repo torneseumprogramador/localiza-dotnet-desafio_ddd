@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Services.Person;
 using Infrastructure.Services;
 using Domain.UseCase.PersonServices;
+using Domain.ViewModel;
+using Domain.UseCase.Builders;
+using Infrastructure.Services.Exceptions;
 
 namespace api.Controllers
 {
@@ -34,11 +37,12 @@ namespace api.Controllers
         [HttpPost]
         [Route("/operators")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Create([FromBody] Operator op)
+        public async Task<IActionResult> Create([FromBody] OperatorSave op)
         {
+            var oper = EntityBuilder.Call<Operator>(op);
             try
             {
-                await _personService.Save(op);
+                await _personService.Save(oper);
                 return StatusCode(201);
             }
             catch(EntityUniq err)
@@ -52,12 +56,13 @@ namespace api.Controllers
         [HttpPut]
         [Route("/operators/{id}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Update(int id, [FromBody] Operator op)
+        public async Task<IActionResult> Update(int id, [FromBody] OperatorSave op)
         {
-            op.Id = id;
+            var oper = EntityBuilder.Call<Operator>(op);
+            oper.Id = id;
             try
             {
-                await _personService.Save(op);
+                await _personService.Save(oper);
                 return StatusCode(204);
             }
             catch(EntityUniq err)
