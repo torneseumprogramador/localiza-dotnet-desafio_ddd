@@ -13,6 +13,7 @@ using Domain.UseCase.PersonServices;
 using Domain.ViewModel;
 using Domain.UseCase.Builders;
 using Infrastructure.Services.Exceptions;
+using Domain.Entities.Exceptions;
 
 namespace api.Controllers
 {
@@ -47,6 +48,13 @@ namespace api.Controllers
                 await _personService.Save(user);
                 return StatusCode(201);
             }
+            catch (UserInvalidCPF err)
+            {
+                return StatusCode(401, new
+                {
+                    Message = err.Message
+                });
+            }
             catch (EntityUniq err)
             {
                 return StatusCode(401, new
@@ -67,6 +75,13 @@ namespace api.Controllers
             {
                 await _personService.Save(user);
                 return StatusCode(204);
+            }
+            catch (UserInvalidCPF err)
+            {
+                return StatusCode(401, new
+                {
+                    Message = err.Message
+                });
             }
             catch (EntityUniq err)
             {

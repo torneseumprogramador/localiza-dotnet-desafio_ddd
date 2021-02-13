@@ -5,12 +5,15 @@
         <State name="__root__">
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
-              <Node name="Controllers" expanded="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="UsersController.cs" selected="True" />
+              </Node>
             </Node>
             <Node name="Domain" expanded="True">
-              <Node name="Entities" expanded="True" selected="True" />
+              <Node name="Entities" expanded="True">
+                <Node name="Exceptions" expanded="True" />
+              </Node>
               <Node name="UseCase" expanded="True">
-                <Node name="Builders" expanded="True" />
                 <Node name="PersonServices" expanded="True" />
               </Node>
               <Node name="ViewModel" expanded="True" />
@@ -19,6 +22,7 @@
               <Node name="Database" expanded="True" />
               <Node name="Services" expanded="True">
                 <Node name="Exceptions" expanded="True" />
+                <Node name="Person" expanded="True" />
               </Node>
             </Node>
             <Node name="Test" expanded="True">

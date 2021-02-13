@@ -11,6 +11,7 @@
     <Folder Include="Authentication\" />
     <Folder Include="ViewModel\Jwt\" />
     <Folder Include="UseCase\Builders\" />
+    <Folder Include="Entities\Exceptions\" />
   </ItemGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
