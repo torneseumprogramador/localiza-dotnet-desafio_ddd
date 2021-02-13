@@ -51,7 +51,7 @@ namespace Domain.UseCase.PersonServices
                 if (size > 0) throw new EntityUniq("CPF já cadastrado");
 
                 await entityRepository.Save(address);
-                userBuilder.IdAddress = address.Id;
+                userBuilder.AddressId = address.Id;
                 await entityRepository.Save(userBuilder);
             }
             else
@@ -62,8 +62,8 @@ namespace Domain.UseCase.PersonServices
                 var address = EntityBuilder.Call<Address>(completeUser);
                 var userBuilder = EntityBuilder.Call<User>(completeUser);
                 userBuilder.Id = user.Id;
-                userBuilder.IdAddress = user.IdAddress;
-                address.Id = Convert.ToInt32(user.IdAddress);
+                userBuilder.AddressId = user.AddressId;
+                address.Id = Convert.ToInt32(user.AddressId);
 
                 var size = await personRepository.CountByIdAndDocument<User>(userBuilder.Id, userBuilder.CPF, Convert.ToInt16(userBuilder.Role));
                 if (size > 0) throw new EntityUniq("CPF já cadastrado");

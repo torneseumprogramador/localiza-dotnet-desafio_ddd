@@ -12,33 +12,35 @@ using Domain.UseCase.UserServices;
 namespace api.Controllers
 {
     [ApiController]
-    public class VehiclesController : ControllerBase
+    public class SchedulesController : ControllerBase
     {
         private readonly EntityService _entityService;
-        private readonly ILogger<VehiclesController> _logger;
+        private readonly ILogger<SchedulesController> _logger;
 
-        public VehiclesController(ILogger<VehiclesController> logger)
+        public SchedulesController(ILogger<SchedulesController> logger)
         {
             _logger = logger;
             _entityService = new EntityService(new EntityRepository());
         }
 
         [HttpGet]
-        [Route("/models")]
+        [Route("/schedules")]
+        [Route("/agendamentos")]
         [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<Vehicle>> Index()
+        public async Task<ICollection<Schedule>> Index()
         {
-            return await _entityService.All<Vehicle>();
+            return await _entityService.All<Schedule>();
         }
 
         [HttpPost]
-        [Route("/models")]
+        [Route("/schedules")]
+        [Route("/agendamentos")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Create([FromBody] Vehicle vehicle)
+        public async Task<IActionResult> Create([FromBody] Schedule schedule)
         {
             try
             {
-                await _entityService.Save(vehicle);
+                await _entityService.Save(schedule);
                 return StatusCode(201);
             }
             catch (EntityUniq err)
@@ -51,14 +53,15 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/models/{id}")]
+        [Route("/schedules/{id}")]
+        [Route("/agendamentos/{id}")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Update(int id, [FromBody] Vehicle vehicle)
+        public async Task<IActionResult> Update(int id, [FromBody] Schedule schedule)
         {
-            vehicle.Id = id;
+            schedule.Id = id;
             try
             {
-                await _entityService.Save(vehicle);
+                await _entityService.Save(schedule);
                 return StatusCode(204);
             }
             catch (EntityUniq err)
@@ -71,13 +74,14 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/models/{id}")]
+        [Route("/schedules/{id}")]
+        [Route("/agendamentos/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await _entityService.Delete<Vehicle>(id);
+                await _entityService.Delete<Schedule>(id);
                 return StatusCode(204);
             }
             catch (EntityEmptyId err)

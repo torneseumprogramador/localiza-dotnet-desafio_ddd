@@ -22,6 +22,7 @@ namespace API.Controllers
 
         [HttpPost]
         [Route("/start")]
+        [Route("/comecar")]
         [AllowAnonymous]
         public async Task<string> InicialConfig()
         {

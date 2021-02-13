@@ -1,19 +1,16 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="API/Controllers/SchedulesController.cs">
-    <Files>
-      <File FileName="API/Controllers/SchedulesController.cs" Line="29" Column="51" />
-    </Files>
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
-              <Node name="Controllers" expanded="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="LoginController.cs" selected="True" />
+              </Node>
             </Node>
             <Node name="Domain" expanded="True">
-              <Node name="Entities" expanded="True">
-                <Node name="Vehicle.cs" selected="True" />
-              </Node>
+              <Node name="Entities" expanded="True" />
               <Node name="UseCase" expanded="True">
                 <Node name="PersonServices" expanded="True" />
               </Node>

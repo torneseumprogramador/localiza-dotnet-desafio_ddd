@@ -30,6 +30,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("/users")]
+        [Route("/usuarios")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<User>> Index()
         {
@@ -38,6 +39,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/users")]
+        [Route("/usuarios")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] UserSave userSave)
         {
@@ -64,6 +66,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("/users/{id}")]
+        [Route("/usuarios/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] UserSave userSave)
         {
@@ -90,6 +93,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("/users/{id}")]
+        [Route("/usuarios/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {

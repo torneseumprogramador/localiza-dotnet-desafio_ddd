@@ -25,6 +25,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("/models")]
+        [Route("/modelos")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Model>> Index()
         {
@@ -33,6 +34,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/models")]
+        [Route("/modelos")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Model model)
         {
@@ -51,6 +53,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("/models/{id}")]
+        [Route("/modelos/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Model model)
         {
@@ -70,6 +73,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("/models/{id}")]
+        [Route("/modelos/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -24,7 +24,7 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("/categories")]
+        [Route("/checklist")]
         [Authorize(Roles = "Operator, User")]
         public async Task<ICollection<Checklist>> Index()
         {
@@ -32,7 +32,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/categories")]
+        [Route("/checklist")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Checklist checklist)
         {
@@ -50,7 +50,7 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/categories/{id}")]
+        [Route("/checklist/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Checklist checklist)
         {
@@ -69,7 +69,7 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/categories/{id}")]
+        [Route("/checklist/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {

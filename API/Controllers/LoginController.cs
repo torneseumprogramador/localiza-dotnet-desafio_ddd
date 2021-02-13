@@ -26,6 +26,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/person/login")]
+        [Route("/pessoa/login")]
         [AllowAnonymous]
         public async Task<ActionResult> Login(PersonLogin userLogin)
         {  
@@ -42,7 +43,8 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/users/login")]
+        [Route("/user/login")]
+        [Route("/usuario/login")]
         [AllowAnonymous]
         public async Task<ActionResult> UserLogin(UserLogin userLogin)
         {
@@ -61,6 +63,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/operator/login")]
+        [Route("/operador/login")]
         [AllowAnonymous]
         public async Task<ActionResult> OperatorLogin(OperatorLogin userLogin)
         {
