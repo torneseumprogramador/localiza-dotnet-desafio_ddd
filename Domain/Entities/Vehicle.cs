@@ -22,15 +22,9 @@ namespace Domain.Entities
         [Required]
         public int BrandId { get; set; }
 
-        [JsonIgnore]
-        public Brand Brand { get; set; }
-
         [Column]
         [Required]
         public int ModelId { get; set; }
-
-        [JsonIgnore]
-        public Model Model { get; set; }
 
         [Column]
         [Required]
@@ -44,7 +38,7 @@ namespace Domain.Entities
         [Column]
         [Required]
         [MaxLength(50)]
-        public DateTime Date { get; set; }
+        public double HourValue { get; set; }
 
         [Column]
         [Required]
@@ -58,9 +52,5 @@ namespace Domain.Entities
         [Column]
         [Required]
         public int CategoryId { get; set; }
-
-		[JsonIgnore]
-        public Category Category { get; set; }
-
     }
 }

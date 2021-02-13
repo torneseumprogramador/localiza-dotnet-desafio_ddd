@@ -12,7 +12,7 @@ namespace Infrastructure.Database
     {
         public static string BuilderInsert<T>(T entity)
         {
-            var name = GetTableName<T>();
+            var name = GetTableName(entity);
             var fields = entity.GetType().GetProperties();
 
             var sql = $"insert into {name} (";
@@ -42,6 +42,15 @@ namespace Infrastructure.Database
             sql += ") SELECT SCOPE_IDENTITY()";
 
             return sql;
+        }
+
+        public static string GetTableName<T>(T entity)
+        {
+            var name = $"{entity.GetType().Name.ToLower()}s";
+            var table = entity.GetType().GetCustomAttribute<TableAttribute>();
+            if (table != null && !string.IsNullOrEmpty(table.Name))
+                name = table.Name;
+            return name;
         }
 
         public static string GetTableName<T>()

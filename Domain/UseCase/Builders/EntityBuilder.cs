@@ -13,7 +13,14 @@ namespace Domain.UseCase.Builders
                 if(value != null)
                 {
                     var prop = entity.GetType().GetProperty(field.Name);
-                    if(prop != null) prop.SetValue(entity, value);
+                    if (prop != null)
+                    {
+                        try
+                        {
+                            prop.SetValue(entity, value);
+                        }
+                        catch { }
+                    }
                 }
             }
 

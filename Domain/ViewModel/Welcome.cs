@@ -16,7 +16,7 @@ namespace Domain.ViewModel
         { 
           get
           { 
-            return "https://localhost:5001/swagger";
+            return "/swagger";
           }
         }
 

@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
+using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Infrastructure.Database;
 
@@ -43,6 +45,39 @@ namespace Infrastructure.Services
         public async Task Update<T>(T entity)
         {
             await this.sqlDriver.Update(entity);
+        }
+
+
+        public async Task<ICollection<T>> All<T>(string key, ICollection<dynamic> parameters = null)
+        {
+            return await this.sqlDriver.AllByPrecedure<T>(key, PrepareParams(parameters));
+        }
+
+        public async Task<T> Get<T>(string key, ICollection<dynamic> parameters = null)
+        {
+            return await this.sqlDriver.GetByPrecedure<T>(key, PrepareParams(parameters));
+        }
+
+        public static List<DbParameter> PrepareParams(ICollection<dynamic> parameters = null)
+        {
+            List<DbParameter> dbParams = null;
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    dbParams = new List<DbParameter>();
+                    string key = param.GetType().GetProperty("Key").GetValue(param, null);
+                    object val = param.GetType().GetProperty("Value").GetValue(param, null);
+
+                    var parameterType = new SqlParameter($"@{key}", System.Data.SqlDbType.VarChar)
+                    {
+                        Value = val
+                    };
+                    dbParams.Add(parameterType);
+                }
+            }
+
+            return dbParams;
         }
     }
 }

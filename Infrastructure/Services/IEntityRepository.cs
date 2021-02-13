@@ -11,5 +11,7 @@ namespace Infrastructure.Services
         Task Delete<T>(int id);
         Task Delete<T>(T entity);
         Task<ICollection<T>> All<T>();
+        Task<ICollection<T>> All<T>(string key, ICollection<dynamic> parameters = null);
+        Task<T> Get<T>(string key, ICollection<dynamic> parameters = null);
     }
 }

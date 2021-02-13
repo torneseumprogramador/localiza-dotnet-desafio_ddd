@@ -85,7 +85,7 @@ namespace Infrastructure.Services.Person
             };
             parameters.Add(parameterPass);
 
-            var entity = await this.sqlDriver.OneByPrecedure<T>("sp_findUserByDocumentAndPassword", parameters);
+            var entity = await this.sqlDriver.GetByPrecedure<T>("sp_findUserByDocumentAndPassword", parameters);
             return entity;
         }
 
@@ -103,25 +103,7 @@ namespace Infrastructure.Services.Person
 
         public async Task<ICollection<T>> All<T>(string proc, ICollection<dynamic> parameters = null)
         {
-            List<DbParameter> dbParams = null;
-
-            if (parameters != null)
-            {
-                foreach (var param in parameters)
-                {
-                    dbParams = new List<DbParameter>();
-                    string key = param.GetType().GetProperty("Key").GetValue(param, null);
-                    object val = param.GetType().GetProperty("Value").GetValue(param, null);
-
-                    var parameterType = new SqlParameter($"@{key}", System.Data.SqlDbType.VarChar)
-                    {
-                        Value = val
-                    };
-                    dbParams.Add(parameterType);
-                }
-            }
-
-            return await this.sqlDriver.AllByPrecedure<T>(proc, dbParams);
+            return await this.sqlDriver.AllByPrecedure<T>(proc, EntityRepository.PrepareParams(parameters));
         }
     }
 }

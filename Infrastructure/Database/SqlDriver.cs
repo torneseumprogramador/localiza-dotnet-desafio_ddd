@@ -10,8 +10,8 @@ namespace Infrastructure.Database
     {
         public SqlDriver()
         {
-            //string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
-            string cnn = "Server=localhost;Database=localiza_labs;Uid=sa;Pwd=!1#2a3d4c5g6v";
+            string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            cnn = "";
             this.connectionString = cnn;
         }
 
@@ -113,7 +113,7 @@ namespace Infrastructure.Database
             return list;
         }
 
-        public async Task<T> OneByPrecedure<T>(string queryString, List<DbParameter> parameters = null)
+        public async Task<T> GetByPrecedure<T>(string queryString, List<DbParameter> parameters = null)
         {
             var instance = Activator.CreateInstance(typeof(T));
             using (SqlConnection connection = new SqlConnection(connectionString))

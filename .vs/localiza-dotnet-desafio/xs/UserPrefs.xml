@@ -1,23 +1,26 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/Database/SqlDriver.cs">
+    <Files>
+      <File FileName="API/Controllers/SchedulesController.cs" Line="24" Column="10" />
+      <File FileName="Domain/UseCase/ScheduleService.cs" Line="26" Column="45" />
+      <File FileName="Infrastructure/Database/SqlDriver.cs" Line="13" Column="79" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
-              <Node name="Authentication" expanded="True" />
               <Node name="Controllers" expanded="True" />
             </Node>
             <Node name="Domain" expanded="True">
-              <Node name="Authentication" expanded="True" />
-              <Node name="Entities" expanded="True">
-                <Node name="Interfaces" expanded="True" />
-                <Node name="Vehicle.cs" selected="True" />
-              </Node>
+              <Node name="Entities" expanded="True" />
               <Node name="UseCase" expanded="True" />
+              <Node name="ViewModel" expanded="True" />
             </Node>
             <Node name="Infrastructure" expanded="True">
-              <Node name="Database" expanded="True" />
+              <Node name="Database" expanded="True">
+                <Node name="SqlDriver.cs" selected="True" />
+              </Node>
               <Node name="Services" expanded="True">
                 <Node name="Person" expanded="True" />
               </Node>
@@ -31,7 +34,9 @@
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/danilo/projetos/gama_localiza_labs/localiza-dotnet-desafio/Infrastructure/Database/SqlDriver.cs" relfile="Infrastructure/Database/SqlDriver.cs" line="14" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MultiItemStartupConfigurations />
 </Properties>

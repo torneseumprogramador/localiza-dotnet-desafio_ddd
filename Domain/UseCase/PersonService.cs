@@ -30,13 +30,13 @@ namespace Domain.UseCase
             if (person.Id == 0)
             {
                 if (person.Type == 0) person.Type = Convert.ToInt16(person.Role);
-                var size = await personRepository.CountByDocument<IPerson>(person.Document, person.Type);
+                var size = await personRepository.CountByDocument<Person>(person.Document, person.Type);
                 if (size > 0) throw new EntityUniq("Documento já cadastrado"); 
                 await entityRepository.Save(person);
             }
             else
             {
-                var size = await personRepository.CountByIdAndDocument<IPerson>(person.Id, person.Document, person.Type);
+                var size = await personRepository.CountByIdAndDocument<Person>(person.Id, person.Document, person.Type);
                 if (size > 0) throw new EntityUniq("Documento já cadastrado");
                 await entityRepository.Update(person);
             }

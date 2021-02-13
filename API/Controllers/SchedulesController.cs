@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Authorization;
 using Infrastructure.Services;
 using Infrastructure.Services.Exceptions;
 using Domain.UseCase.UserServices;
+using Domain.ViewModel;
+using Domain.UseCase;
 
 namespace api.Controllers
 {
@@ -15,12 +17,14 @@ namespace api.Controllers
     public class SchedulesController : ControllerBase
     {
         private readonly EntityService _entityService;
+        private readonly ScheduleService _scheduleService;
         private readonly ILogger<SchedulesController> _logger;
 
         public SchedulesController(ILogger<SchedulesController> logger)
         {
             _logger = logger;
             _entityService = new EntityService(new EntityRepository());
+            _scheduleService = new ScheduleService(new EntityRepository());
         }
 
         [HttpGet]
@@ -30,6 +34,25 @@ namespace api.Controllers
         public async Task<ICollection<Schedule>> Index()
         {
             return await _entityService.All<Schedule>();
+        }
+
+        [HttpPost]
+        [Route("/schedules/simulation")]
+        [Route("/agendamentos/simulacao")]
+        [Authorize(Roles = "User, Operator")]
+        public async Task<IActionResult> Simulation([FromBody] VehicleScheduleSimulationInput schedule)
+        {
+            try
+            {
+                return StatusCode(201, await _scheduleService.Simulation(schedule));
+            }
+            catch (EntityUniq err)
+            {
+                return StatusCode(401, new
+                {
+                    Message = err.Message
+                });
+            }
         }
 
         [HttpPost]
