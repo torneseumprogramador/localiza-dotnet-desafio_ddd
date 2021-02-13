@@ -1,7 +1,7 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="API/Controllers/ModelsController.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="API/Controllers/ConfigureController.cs">
     <Files>
-      <File FileName="API/Controllers/ModelsController.cs" Line="20" Column="57" />
+      <File FileName="API/Controllers/ConfigureController.cs" Line="24" Column="18" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
@@ -9,7 +9,7 @@
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
               <Node name="Controllers" expanded="True">
-                <Node name="ModelsController.cs" selected="True" />
+                <Node name="ConfigureController.cs" selected="True" />
               </Node>
             </Node>
             <Node name="Domain" expanded="True">

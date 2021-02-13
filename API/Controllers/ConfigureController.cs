@@ -11,25 +11,17 @@ namespace API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class HomeController : ControllerBase
+    public class ConfigureController : ControllerBase
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<ConfigureController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
+        public ConfigureController(ILogger<ConfigureController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet]
-        [Route("/")]
-        [AllowAnonymous]
-        public Welcome Index()
-        {
-            return new Welcome();
-        }
-
-        [HttpGet]
-        [Route("/config/start")]
+        [HttpPost]
+        [Route("/start")]
         [AllowAnonymous]
         public async Task<string> InicialConfig()
         {

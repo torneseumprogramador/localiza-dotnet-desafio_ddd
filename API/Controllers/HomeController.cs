@@ -27,19 +27,5 @@ namespace API.Controllers
         {
             return new Welcome();
         }
-
-        [HttpGet]
-        [Route("/config/start")]
-        [AllowAnonymous]
-        public async Task<string> InicialConfig()
-        {
-            var sql = new SqlDriver();
-            //await sql.CreateTable<Person>();
-            //await sql.CreateTable<Address>();
-            //await sql.CreateTable<Model>();
-            //await sql.CreateTable<Brand>();
-
-            return "Sistema configurado";
-        }
     }
 }
