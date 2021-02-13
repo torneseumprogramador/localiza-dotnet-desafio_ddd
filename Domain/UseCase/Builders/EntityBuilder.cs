@@ -7,6 +7,7 @@ namespace Domain.UseCase.Builders
         public static T Call<T>(object obj)
         {
             var entity = Activator.CreateInstance<T>();
+            if (obj == null) return entity;
             foreach (var field in obj.GetType().GetProperties())
             {
                 var value = obj.GetType().GetProperty(field.Name).GetValue(obj);

@@ -35,6 +35,8 @@ namespace Domain.UseCase
             };
 
             var completeVehicle = await entityRepository.Get<CompleteVehicle>("sp_completeVehicle", parameters);
+            if (completeVehicle == null || completeVehicle.Id == 0) throw new EntityNotFound("Veículo não encontrado");
+
             var vehicleMap = EntityBuilder.Call<VehicleMap>(completeVehicle);
             vehicleMap.Model = new Model() { Id = completeVehicle.ModelId, Name = completeVehicle.Model };
             vehicleMap.Brand = new Brand() { Id = completeVehicle.BrandId, Name = completeVehicle.Brand };

@@ -44,7 +44,14 @@ namespace api.Controllers
         {
             try
             {
-                return StatusCode(201, await _scheduleService.Simulation(schedule));
+                return StatusCode(200, await _scheduleService.Simulation(schedule));
+            }
+            catch (EntityNotFound err)
+            {
+                return StatusCode(403, new
+                {
+                    Message = err.Message
+                });
             }
             catch (EntityUniq err)
             {
