@@ -28,7 +28,8 @@ namespace Infrastructure.Database
                 command.Parameters.Add(parameter);
             }
             command.Connection.Open();
-            await command.ExecuteNonQueryAsync();
+
+            MapTable.SetIdOfEntity(obj, await command.ExecuteScalarAsync());
             await connection.CloseAsync();
         }
 
@@ -143,19 +144,17 @@ namespace Infrastructure.Database
 
         public async Task<T> FindById<T>(int id)
         {
+            using SqlConnection connection = new SqlConnection(connectionString);
             var instance = MapTable.CreateInstanceAndSetId<T>(id);
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                var queryString = MapTable.BuildFindById(instance);
-                SqlCommand command = new SqlCommand(queryString, connection);
-                command.Connection.Open();
-                using SqlDataReader dr = command.ExecuteReader();
-                if (await dr.ReadAsync())
-                    this.fill(instance, dr);
+            var queryString = MapTable.BuildFindById<T>(id);
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Connection.Open();
+            using SqlDataReader dr = command.ExecuteReader();
+            if (await dr.ReadAsync())
+                this.fill(instance, dr);
 
-                await dr.CloseAsync();
-                await dr.DisposeAsync();
-            }
+            await dr.CloseAsync();
+            await dr.DisposeAsync();
             return instance;
         }
 

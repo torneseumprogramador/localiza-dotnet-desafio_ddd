@@ -24,9 +24,8 @@ namespace Domain.ViewModel
         public string Street { get; set; }
 
         [Required]
-        public string Number { get; set; }
+        public int Number { get; set; }
 
-        [Required]
         public string Complement { get; set; }
 
         [Required]

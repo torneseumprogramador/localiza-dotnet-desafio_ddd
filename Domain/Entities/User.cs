@@ -52,18 +52,17 @@ namespace Domain.Entities
 
         private bool isCPFValid()
         {
-            string cpf = this.Document;
             int[] multiplicador1 = new int[9] { 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             int[] multiplicador2 = new int[10] { 11, 10, 9, 8, 7, 6, 5, 4, 3, 2 };
             string tempCpf;
             string digito;
             int soma;
             int resto;
-            cpf = cpf.Trim();
-            cpf = cpf.Replace(".", "").Replace("-", "");
-            if (cpf.Length != 11)
+            this.Document = this.Document.Trim();
+            this.Document = this.Document.Replace(".", "").Replace("-", "");
+            if (this.Document.Length != 11)
                 return false;
-            tempCpf = cpf.Substring(0, 9);
+            tempCpf = this.Document.Substring(0, 9);
             soma = 0;
 
             for (int i = 0; i < 9; i++)
@@ -84,7 +83,7 @@ namespace Domain.Entities
             else
                 resto = 11 - resto;
             digito = digito + resto.ToString();
-            return cpf.EndsWith(digito);
+            return this.Document.EndsWith(digito);
         }
     }
 }

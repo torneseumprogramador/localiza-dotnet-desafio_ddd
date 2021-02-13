@@ -19,7 +19,10 @@ namespace Domain.UseCase.Builders
             {
                 var value = userSave.GetType().GetProperty(field.Name).GetValue(userSave);
                 if(value != null)
-                    entity.GetType().GetProperty(field.Name).SetValue(entity, value);
+                {
+                    var prop = entity.GetType().GetProperty(field.Name);
+                    if(prop != null) prop.SetValue(entity, value);
+                }
             }
 
             return entity;

@@ -1,36 +1,39 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.Workbench ActiveDocument="Domain/Entities/User.cs">
+    <Files>
+      <File FileName="Domain/UseCase/PersonServices/PersonService.cs" Line="65" Column="1" />
+      <File FileName="Domain/ViewModel/UserSave.cs" Line="21" Column="44" />
+      <File FileName="Infrastructure/Services/EntityRepository.cs" Line="27" Column="1" />
+      <File FileName="Infrastructure/Database/SqlDriver.cs" Line="151" Column="1" />
+      <File FileName="Domain/Entities/User.cs" Line="53" Column="22" />
+    </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
-              <Node name="Controllers" expanded="True">
-                <Node name="UsersController.cs" selected="True" />
-              </Node>
+              <Node name="Controllers" expanded="True" />
             </Node>
             <Node name="Domain" expanded="True">
               <Node name="Entities" expanded="True">
-                <Node name="Exceptions" expanded="True" />
+                <Node name="User.cs" selected="True" />
               </Node>
               <Node name="UseCase" expanded="True">
+                <Node name="Builders" expanded="True" />
                 <Node name="PersonServices" expanded="True" />
               </Node>
               <Node name="ViewModel" expanded="True" />
             </Node>
             <Node name="Infrastructure" expanded="True">
               <Node name="Database" expanded="True" />
-              <Node name="Services" expanded="True">
-                <Node name="Exceptions" expanded="True" />
-                <Node name="Person" expanded="True" />
-              </Node>
-            </Node>
-            <Node name="Test" expanded="True">
-              <Node name="Infraestructure" expanded="True">
-                <Node name="Dababase" expanded="True" />
-              </Node>
+              <Node name="Services" expanded="True" />
             </Node>
           </Node>
+        </State>
+      </Pad>
+      <Pad Id="MonoDevelop.Debugger.WatchPad">
+        <State>
+          <Value>field.Name</Value>
         </State>
       </Pad>
     </Pads>

@@ -42,10 +42,9 @@ namespace api.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Create([FromBody] UserSave userSave)
         {
-            var user = EntityBuilder.Call<User>(userSave);
             try
             {
-                await _personService.Save(user);
+                await _personService.SaveUser(userSave);
                 return StatusCode(201);
             }
             catch (UserInvalidCPF err)
@@ -69,11 +68,9 @@ namespace api.Controllers
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Update(int id, [FromBody] UserSave userSave)
         {
-            var user = EntityBuilder.Call<User>(userSave);
-            user.Id = id;
             try
             {
-                await _personService.Save(user);
+                await _personService.SaveUser(userSave, id);
                 return StatusCode(204);
             }
             catch (UserInvalidCPF err)

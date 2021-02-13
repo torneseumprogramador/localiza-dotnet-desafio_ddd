@@ -45,9 +45,23 @@ namespace Infrastructure.Database
             sql += ") values (";
 
             sql += string.Join(",", colsDbParameter.ToArray());
-            sql += ")";
+            sql += ") SELECT SCOPE_IDENTITY()";
 
             return sql;
+        }
+
+        public static void SetIdOfEntity<T>(T entity, object value)
+        {
+            var fields = entity.GetType().GetProperties();
+            foreach (var field in fields)
+            {
+                var pkAttr = field.GetCustomAttribute<KeyAttribute>();
+                if (pkAttr != null)
+                {
+                    field.SetValue(entity, Convert.ToInt32(value));
+                    break;
+                }
+            }
         }
 
         public static T CreateInstanceAndSetId<T>(int id)
@@ -101,7 +115,7 @@ namespace Infrastructure.Database
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
             var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
-            var columnName = (cAttr != null) ? cAttr.Name : pkProperty.Name;
+            var columnName = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : pkProperty.Name;;
 
             sql += $" where {columnName}=@{columnName}";
 
@@ -151,22 +165,22 @@ namespace Infrastructure.Database
 
             var value = Convert.ToInt32(pkProperty.GetValue(entity));
             var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
-            var columnName = (cAttr != null) ? cAttr.Name : pkProperty.Name;
+            var columnName = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : pkProperty.Name;;
             sql += $" where {columnName}={columnName}";
 
             return sql;
         }
 
-        public static string BuildFindById<T>(T entity)
+        public static string BuildFindById<T>(int id)
         {
-            var name = $"{entity.GetType().Name.ToLower()}s";
-            var table = entity.GetType().GetCustomAttribute<TableAttribute>();
+            var name = $"{typeof(T).Name.ToLower()}s";
+            var table = typeof(T).GetCustomAttribute<TableAttribute>();
             if (table != null && !string.IsNullOrEmpty(table.Name))
             {
                 name = table.Name;
             }
 
-            var fields = entity.GetType().GetProperties();
+            var fields = typeof(T).GetProperties();
 
             var sql = $"select * from {name}";
 
@@ -183,10 +197,9 @@ namespace Infrastructure.Database
 
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
-            var value = Convert.ToInt32(pkProperty.GetValue(entity));
             var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
-            var columnName = (cAttr != null) ? cAttr.Name : pkProperty.Name;
-            sql += $" where {columnName}={columnName}";
+            var columnName = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : pkProperty.Name;
+            sql += $" where {columnName}={id}";
 
             return sql;
         }
@@ -274,7 +287,7 @@ namespace Infrastructure.Database
                     if (pkField != null)
                     {
                         var cAttr = field.GetCustomAttribute<ColumnAttribute>();
-                        var nameField = (cAttr != null) ? cAttr.Name : field.Name;
+                        var nameField = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : field.Name;
 
                         var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);
                         if (parameter != null)
