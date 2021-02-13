@@ -11,7 +11,7 @@ namespace Domain.Entities
         [Key]
         [Column]
 		[JsonIgnore]
-        public virtual int Id { get; set; }
+        public int Id { get; set; }
 
         [Column]
         [Required]

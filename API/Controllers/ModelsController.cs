@@ -15,16 +15,16 @@ namespace api.Controllers
     public class ModelsController : ControllerBase
     {
         private readonly EntityService _entityService;
-        private readonly ILogger<OperatorsController> _logger;
+        private readonly ILogger<ModelsController> _logger;
 
-        public ModelsController(ILogger<OperatorsController> logger)
+        public ModelsController(ILogger<ModelsController> logger)
         {
             _logger = logger;
             _entityService = new EntityService(new EntityRepository());
         }
 
         [HttpGet]
-        [Route("/operators")]
+        [Route("/models")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Model>> Index()
         {
@@ -32,7 +32,7 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/operators")]
+        [Route("/models")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Create([FromBody] Model model)
         {
@@ -50,7 +50,7 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/operators/{id}")]
+        [Route("/models/{id}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Update(int id, [FromBody] Model model)
         {
@@ -69,7 +69,7 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/operators/{id}")]
+        [Route("/models/{id}")]
         [Authorize(Roles = "User")]
         public async Task<IActionResult> Delete(int id)
         {
