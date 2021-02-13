@@ -32,7 +32,7 @@ namespace Domain.Entities
 		{
 			get
 			{
-                if (!isCPFValid()) throw new UserInvalidCPF("Número de CPF inválido");
+                if (!string.IsNullOrEmpty(this.Document) && !isCPFValid()) throw new UserInvalidCPF("Número de CPF inválido");
 				return this.Document;
 			}
             set

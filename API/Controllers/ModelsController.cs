@@ -5,44 +5,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services.Person;
 using Infrastructure.Services;
-using Domain.UseCase.PersonServices;
-using Domain.ViewModel;
-using Domain.UseCase.Builders;
 using Infrastructure.Services.Exceptions;
+using Domain.UseCase.UserServices;
 
 namespace api.Controllers
 {
     [ApiController]
-    public class OperatorsController : ControllerBase
+    public class ModelsController : ControllerBase
     {
-        private readonly PersonService _personService;
+        private readonly EntityService _entityService;
         private readonly ILogger<OperatorsController> _logger;
 
-        public OperatorsController(ILogger<OperatorsController> logger)
+        public ModelsController(ILogger<OperatorsController> logger)
         {
             _logger = logger;
-            _personService = new PersonService(new PersonRepository(), new EntityRepository());
+            _entityService = new EntityService(new EntityRepository());
         }
 
         [HttpGet]
         [Route("/operators")]
         [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<Operator>> Index()
+        public async Task<ICollection<Model>> Index()
         {
-            return await _personService.AllByType<Operator>(PersonRole.Operator);
+            return await _entityService.All<Model>();
         }
 
         [HttpPost]
         [Route("/operators")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Create([FromBody] OperatorSave op)
+        public async Task<IActionResult> Create([FromBody] Model model)
         {
-            var oper = EntityBuilder.Call<Operator>(op);
             try
             {
-                await _personService.Save(oper);
+                await _entityService.Save(model);
                 return StatusCode(201);
             }
             catch(EntityUniq err)
@@ -56,13 +52,12 @@ namespace api.Controllers
         [HttpPut]
         [Route("/operators/{id}")]
         [Authorize(Roles = "User")]
-        public async Task<IActionResult> Update(int id, [FromBody] OperatorSave op)
+        public async Task<IActionResult> Update(int id, [FromBody] Model model)
         {
-            var oper = EntityBuilder.Call<Operator>(op);
-            oper.Id = id;
+            model.Id = id;
             try
             {
-                await _personService.Save(oper);
+                await _entityService.Save(model);
                 return StatusCode(204);
             }
             catch(EntityUniq err)
@@ -80,7 +75,7 @@ namespace api.Controllers
         {
             try
             {
-                await _personService.Delete(id);
+                await _entityService.Delete<Model>(id);
                 return StatusCode(204);
             }
             catch(EntityEmptyId err)

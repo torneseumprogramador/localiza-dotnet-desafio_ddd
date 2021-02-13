@@ -1,23 +1,20 @@
 ﻿<Properties StartupConfiguration="{240935EF-23D1-4598-BF87-85B8FA1F806F}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Domain/Entities/User.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="API/Controllers/BrandsController.cs">
     <Files>
-      <File FileName="Domain/UseCase/PersonServices/PersonService.cs" Line="65" Column="1" />
-      <File FileName="Domain/ViewModel/UserSave.cs" Line="21" Column="44" />
-      <File FileName="Infrastructure/Services/EntityRepository.cs" Line="27" Column="1" />
-      <File FileName="Infrastructure/Database/SqlDriver.cs" Line="151" Column="1" />
-      <File FileName="Domain/Entities/User.cs" Line="53" Column="22" />
+      <File FileName="API/Controllers/ModelsController.cs" Line="9" Column="18" />
+      <File FileName="API/Controllers/BrandsController.cs" Line="25" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="localiza-dotnet-desafio" expanded="True">
             <Node name="API" expanded="True">
-              <Node name="Controllers" expanded="True" />
+              <Node name="Controllers" expanded="True">
+                <Node name="BrandsController.cs" selected="True" />
+              </Node>
             </Node>
             <Node name="Domain" expanded="True">
-              <Node name="Entities" expanded="True">
-                <Node name="User.cs" selected="True" />
-              </Node>
+              <Node name="Entities" expanded="True" />
               <Node name="UseCase" expanded="True">
                 <Node name="Builders" expanded="True" />
                 <Node name="PersonServices" expanded="True" />
@@ -26,14 +23,16 @@
             </Node>
             <Node name="Infrastructure" expanded="True">
               <Node name="Database" expanded="True" />
-              <Node name="Services" expanded="True" />
+              <Node name="Services" expanded="True">
+                <Node name="Person" expanded="True" />
+              </Node>
             </Node>
           </Node>
         </State>
       </Pad>
       <Pad Id="MonoDevelop.Debugger.WatchPad">
         <State>
-          <Value>field.Name</Value>
+          <Value>param.GetType().GetProperty("Key").GetValue(param, null);</Value>
         </State>
       </Pad>
     </Pads>

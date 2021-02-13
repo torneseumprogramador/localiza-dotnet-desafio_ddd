@@ -12,13 +12,7 @@ namespace Infrastructure.Database
     {
         public static string BuilderInsert<T>(T entity)
         {
-            var name = $"{entity.GetType().Name.ToLower()}s";
-            var table = entity.GetType().GetCustomAttribute<TableAttribute>();
-            if (table != null && !string.IsNullOrEmpty(table.Name))
-            {
-                name = table.Name;
-            }
-
+            var name = GetTableName<T>();
             var fields = entity.GetType().GetProperties();
 
             var sql = $"insert into {name} (";
@@ -48,6 +42,93 @@ namespace Infrastructure.Database
             sql += ") SELECT SCOPE_IDENTITY()";
 
             return sql;
+        }
+
+        public static string GetTableName<T>()
+        {
+            var name = $"{typeof(T).Name.ToLower()}s";
+            var table = typeof(T).GetCustomAttribute<TableAttribute>();
+            if (table != null && !string.IsNullOrEmpty(table.Name))
+                name = table.Name;
+            return name;
+        }
+
+        public static string CreateTable<T>()
+        {
+            string tableName = GetTableName<T>();
+            string sqlCommand = "IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[" + tableName + "]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)" +
+                                "DROP TABLE " + tableName  + ";";
+
+            sqlCommand += "CREATE TABLE " + tableName + "(";
+
+            foreach (var field in typeof(T).GetProperties())
+            {
+                var pkField = field.GetCustomAttribute<KeyAttribute>();
+                if(pkField != null)
+                    sqlCommand += GetPropertyName(field) + " " + GetIntDataType(field) + "  IDENTITY(1,1) NOT NULL, ";
+
+                var persistedField = field.GetCustomAttribute<ColumnAttribute>();
+                if (persistedField != null && pkField == null)
+                    sqlCommand += GetPropertyName(field) + " " + GetIntDataType(field) + ", ";
+            }
+
+            sqlCommand += ")";
+            return sqlCommand;
+        }
+
+        private static string GetIntDataType(PropertyInfo pi)
+        {
+            var persistedField = pi.GetCustomAttribute<ColumnAttribute>();
+            var requiredField = pi.GetCustomAttribute<RequiredAttribute>();
+            var lengthField = pi.GetCustomAttribute<MaxLengthAttribute>();
+
+            var field = persistedField != null && persistedField.TypeName != null ? persistedField.TypeName : string.Empty;
+            var validate = requiredField != null;
+            var size = lengthField != null ? lengthField.Length : 255;
+
+            if (!string.IsNullOrEmpty(field))
+            {
+                return $" {field} " + (validate ? " NOT NULL" : "");
+            }
+
+            switch (pi.PropertyType.Name)
+            {
+                case "String":
+                    field = " varchar(" + size + ")" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Nullable`1":
+                    field = " " + GetIntDataType(pi) + "" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Int32":
+                    field = " int" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Int64":
+                    field = " bigint" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Double":
+                    field = " decimal(9, 2)" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Single":
+                    field = " float" + (validate ? " NOT NULL" : "");
+                    break;
+                case "DateTime":
+                    field = " datetime" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Boolean":
+                    field = " tinyint" + (validate ? " NOT NULL" : "");
+                    break;
+                default:
+                    field = " varchar(" + size + ")" + (validate ? " NOT NULL" : "");
+                    break;
+            }
+
+            return field;
+        }
+
+        public static string GetPropertyName(PropertyInfo field)
+        {
+            var cAttr = field.GetCustomAttribute<ColumnAttribute>();
+            return (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : field.Name; ;
         }
 
         public static void SetIdOfEntity<T>(T entity, object value)
@@ -114,9 +195,7 @@ namespace Infrastructure.Database
 
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
-            var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
-            var columnName = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : pkProperty.Name;;
-
+            var columnName = GetPropertyName(pkProperty);
             sql += $" where {columnName}=@{columnName}";
 
             return sql;
@@ -164,9 +243,8 @@ namespace Infrastructure.Database
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
             var value = Convert.ToInt32(pkProperty.GetValue(entity));
-            var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
-            var columnName = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : pkProperty.Name;;
-            sql += $" where {columnName}={columnName}";
+            var columnName = GetPropertyName(pkProperty);
+            sql += $" where {columnName}={value}";
 
             return sql;
         }
@@ -197,8 +275,7 @@ namespace Infrastructure.Database
 
             if (pkProperty == null) throw new Exception("Esta entidade não foi definida uma chave primário, coloque o atributo [Pk]");
 
-            var cAttr = pkProperty.GetCustomAttribute<ColumnAttribute>();
-            var columnName = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : pkProperty.Name;
+            var columnName = GetPropertyName(pkProperty);
             sql += $" where {columnName}={id}";
 
             return sql;
@@ -286,9 +363,7 @@ namespace Infrastructure.Database
                 {
                     if (pkField != null)
                     {
-                        var cAttr = field.GetCustomAttribute<ColumnAttribute>();
-                        var nameField = (cAttr != null && !string.IsNullOrEmpty(cAttr.Name)) ? cAttr.Name : field.Name;
-
+                        var nameField = GetPropertyName(field);
                         var parameter = GetBuilderValue(obj, $"@{nameField}", field.Name);
                         if (parameter != null)
                             parameters.Add(parameter);

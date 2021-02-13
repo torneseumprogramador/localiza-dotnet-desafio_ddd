@@ -89,7 +89,7 @@ namespace Infrastructure.Services.Person
             return entity;
         }
 
-        public async Task<ICollection<T>> All<T>(int type)
+        public async Task<ICollection<T>> AllByType<T>(int type)
         {
             List<DbParameter> parameters = new List<DbParameter>();
             var parameterType = new SqlParameter("@type", System.Data.SqlDbType.TinyInt)
@@ -99,6 +99,29 @@ namespace Infrastructure.Services.Person
             parameters.Add(parameterType);
 
             return await this.sqlDriver.AllByPrecedure<T>("sp_findUsersByType", parameters);
+        }
+
+        public async Task<ICollection<T>> All<T>(string proc, ICollection<dynamic> parameters = null)
+        {
+            List<DbParameter> dbParams = null;
+
+            if (parameters != null)
+            {
+                foreach (var param in parameters)
+                {
+                    dbParams = new List<DbParameter>();
+                    string key = param.GetType().GetProperty("Key").GetValue(param, null);
+                    object val = param.GetType().GetProperty("Value").GetValue(param, null);
+
+                    var parameterType = new SqlParameter($"@{key}", System.Data.SqlDbType.VarChar)
+                    {
+                        Value = val
+                    };
+                    dbParams.Add(parameterType);
+                }
+            }
+
+            return await this.sqlDriver.AllByPrecedure<T>(proc, dbParams);
         }
     }
 }

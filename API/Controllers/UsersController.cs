@@ -11,7 +11,6 @@ using Infrastructure.Services.Person;
 using Infrastructure.Services;
 using Domain.UseCase.PersonServices;
 using Domain.ViewModel;
-using Domain.UseCase.Builders;
 using Infrastructure.Services.Exceptions;
 using Domain.Entities.Exceptions;
 
@@ -34,7 +33,7 @@ namespace api.Controllers
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<User>> Index()
         {
-            return await _personService.All<User>(PersonRole.User);
+            return await _personService.AllUsers();
         }
 
         [HttpPost]

@@ -15,6 +15,7 @@ namespace Domain.Entities
 
         [Column]
         [Required]
+        [MaxLength(10)]
         public string ZipCode { get; set; }
 
         [Column]
@@ -30,10 +31,12 @@ namespace Domain.Entities
 
         [Column]
         [Required]
+        [MaxLength(50)]
         public string City { get; set; }
 
         [Column]
         [Required]
+        [MaxLength(2)]
         public string State { get; set; }
     }
 }

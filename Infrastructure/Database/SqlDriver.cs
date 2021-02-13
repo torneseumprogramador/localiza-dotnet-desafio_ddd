@@ -203,5 +203,15 @@ namespace Infrastructure.Database
             await command.ExecuteNonQueryAsync();
             await connection.CloseAsync();
         }
+
+        public async Task CreateTable<T>()
+        {
+            using SqlConnection connection = new SqlConnection(connectionString);
+            var queryString = MapTable.CreateTable<T>();
+            SqlCommand command = new SqlCommand(queryString, connection);
+            command.Connection.Open();
+            await command.ExecuteNonQueryAsync();
+            await connection.CloseAsync();
+        }
     }
 }

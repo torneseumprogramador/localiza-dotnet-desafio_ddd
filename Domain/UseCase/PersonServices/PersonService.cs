@@ -124,9 +124,31 @@ namespace Domain.UseCase.PersonServices
             };
         }
 
-        public async Task<ICollection<T>> All<T>(PersonRole role)
+        public async Task<ICollection<T>> AllByType<T>(PersonRole role)
         {
-           return await personRepository.All<T>(Convert.ToInt16(role));
+           return await personRepository.AllByType<T>(Convert.ToInt16(role));
+        }
+
+        public async Task<ICollection<User>> AllUsers()
+        {
+            //Exemplo usando parâmetros
+            //var parameters = new List<dynamic>();
+            //parameters.Add(new
+            //{
+            //    Key = "Nome",
+            //    Value = "Danilo"
+            //});
+            ////var completeUsers = await personRepository.All<CompleteUser>("sp_completeUsers", parameters);
+
+            var completeUsers = await personRepository.All<CompleteUser>("sp_completeUsers");
+            var users = new List<User>();
+            foreach(var completeUser in completeUsers)
+            {
+                var user = EntityBuilder.Call<User>(completeUser);
+                user.Address = EntityBuilder.Call<Address>(completeUser);
+                users.Add(user);
+            }
+            return users;
         }
     }
 }

@@ -15,10 +15,12 @@ namespace Domain.Entities
 
         [Column]
 		[Required]
+        [MaxLength(100)]
         public virtual string Name { get; set; }
 
         [Column]
 		[Required]
+        [MaxLength(15)]
         public virtual string Document { get; set; }
 
         [Column]
@@ -27,6 +29,7 @@ namespace Domain.Entities
 
         [Column]
 		[Required]
+        [MaxLength(150)]
         public virtual string Password { get; set; }
 
         [Column]
