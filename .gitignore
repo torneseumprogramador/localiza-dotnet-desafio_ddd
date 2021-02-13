@@ -89,4 +89,7 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+.vs
+Doc
+
 # End of https://www.toptal.com/developers/gitignore/api/vscode,windows,macos,linux,dotnetcore

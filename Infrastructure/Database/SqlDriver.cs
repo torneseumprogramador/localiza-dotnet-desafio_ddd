@@ -11,7 +11,7 @@ namespace Infrastructure.Database
         public SqlDriver()
         {
             string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
-            cnn = "";
+            
             this.connectionString = cnn;
         }
 
