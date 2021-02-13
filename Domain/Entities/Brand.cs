@@ -10,7 +10,6 @@ namespace Domain.Entities
     {
         [Key]
         [Column]
-		[JsonIgnore]
         public int Id { get; set; }
 
         [Column]
