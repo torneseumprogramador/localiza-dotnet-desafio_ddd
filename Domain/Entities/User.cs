@@ -22,9 +22,8 @@ namespace Domain.Entities
 
 		[Column]
 		[JsonIgnore]
-		public override int? IdAddress { get; set; }
+		public override int? AddressId { get; set; }
 
-		[Column]
 		public Address Address { get; set; }
 
 		[Required]

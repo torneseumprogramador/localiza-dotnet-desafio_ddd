@@ -38,7 +38,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/users")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] UserSave userSave)
         {
             try
@@ -64,7 +64,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("/users/{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] UserSave userSave)
         {
             try
@@ -90,7 +90,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("/users/{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {
             try

@@ -5,44 +5,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services.Person;
 using Infrastructure.Services;
-using Domain.UseCase.PersonServices;
-using Domain.ViewModel;
-using Domain.UseCase.Builders;
 using Infrastructure.Services.Exceptions;
+using Domain.UseCase.UserServices;
 
 namespace api.Controllers
 {
     [ApiController]
-    public class OperatorsController : ControllerBase
+    public class ChecklistController : ControllerBase
     {
-        private readonly PersonService _personService;
-        private readonly ILogger<OperatorsController> _logger;
+        private readonly EntityService _entityService;
+        private readonly ILogger<ChecklistController> _logger;
 
-        public OperatorsController(ILogger<OperatorsController> logger)
+        public ChecklistController(ILogger<ChecklistController> logger)
         {
             _logger = logger;
-            _personService = new PersonService(new PersonRepository(), new EntityRepository());
+            _entityService = new EntityService(new EntityRepository());
         }
 
         [HttpGet]
-        [Route("/operators")]
-        [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<Operator>> Index()
+        [Route("/categories")]
+        [Authorize(Roles = "Operator, User")]
+        public async Task<ICollection<Checklist>> Index()
         {
-            return await _personService.AllByType<Operator>(PersonRole.Operator);
+            return await _entityService.All<Checklist>();
         }
 
         [HttpPost]
-        [Route("/operators")]
+        [Route("/categories")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Create([FromBody] OperatorSave op)
+        public async Task<IActionResult> Create([FromBody] Checklist checklist)
         {
-            var oper = EntityBuilder.Call<Operator>(op);
             try
             {
-                await _personService.Save(oper);
+                await _entityService.Save(checklist);
                 return StatusCode(201);
             }
             catch(EntityUniq err)
@@ -54,15 +50,14 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/operators/{id}")]
+        [Route("/categories/{id}")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Update(int id, [FromBody] OperatorSave op)
+        public async Task<IActionResult> Update(int id, [FromBody] Checklist checklist)
         {
-            var oper = EntityBuilder.Call<Operator>(op);
-            oper.Id = id;
+            checklist.Id = id;
             try
             {
-                await _personService.Save(oper);
+                await _entityService.Save(checklist);
                 return StatusCode(204);
             }
             catch(EntityUniq err)
@@ -74,13 +69,13 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/operators/{id}")]
+        [Route("/categories/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await _personService.Delete(id);
+                await _entityService.Delete<Checklist>(id);
                 return StatusCode(204);
             }
             catch(EntityEmptyId err)

@@ -24,7 +24,7 @@ namespace api.Controllers
 
         [HttpGet]
         [Route("/persons")]
-        [Authorize(Roles = "User, Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<ICollection<Person>> Index()
         {
             return await _entityService.All<Person>();

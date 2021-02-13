@@ -5,44 +5,40 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services.Person;
 using Infrastructure.Services;
-using Domain.UseCase.PersonServices;
-using Domain.ViewModel;
-using Domain.UseCase.Builders;
 using Infrastructure.Services.Exceptions;
+using Domain.UseCase.UserServices;
 
 namespace api.Controllers
 {
     [ApiController]
-    public class OperatorsController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
-        private readonly PersonService _personService;
-        private readonly ILogger<OperatorsController> _logger;
+        private readonly EntityService _entityService;
+        private readonly ILogger<CategoriesController> _logger;
 
-        public OperatorsController(ILogger<OperatorsController> logger)
+        public CategoriesController(ILogger<CategoriesController> logger)
         {
             _logger = logger;
-            _personService = new PersonService(new PersonRepository(), new EntityRepository());
+            _entityService = new EntityService(new EntityRepository());
         }
 
         [HttpGet]
-        [Route("/operators")]
+        [Route("/categories")]
         [Authorize(Roles = "User, Operator")]
-        public async Task<ICollection<Operator>> Index()
+        public async Task<ICollection<Category>> Index()
         {
-            return await _personService.AllByType<Operator>(PersonRole.Operator);
+            return await _entityService.All<Category>();
         }
 
         [HttpPost]
-        [Route("/operators")]
+        [Route("/categories")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Create([FromBody] OperatorSave op)
+        public async Task<IActionResult> Create([FromBody] Category category)
         {
-            var oper = EntityBuilder.Call<Operator>(op);
             try
             {
-                await _personService.Save(oper);
+                await _entityService.Save(category);
                 return StatusCode(201);
             }
             catch(EntityUniq err)
@@ -54,15 +50,14 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/operators/{id}")]
+        [Route("/categories/{id}")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Update(int id, [FromBody] OperatorSave op)
+        public async Task<IActionResult> Update(int id, [FromBody] Category category)
         {
-            var oper = EntityBuilder.Call<Operator>(op);
-            oper.Id = id;
+            category.Id = id;
             try
             {
-                await _personService.Save(oper);
+                await _entityService.Save(category);
                 return StatusCode(204);
             }
             catch(EntityUniq err)
@@ -74,13 +69,13 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/operators/{id}")]
+        [Route("/categories/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                await _personService.Delete(id);
+                await _entityService.Delete<Category>(id);
                 return StatusCode(204);
             }
             catch(EntityEmptyId err)

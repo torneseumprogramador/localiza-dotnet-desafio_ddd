@@ -33,7 +33,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/brands")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Brand brand)
         {
             try
@@ -51,7 +51,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("/brands/{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Brand brand)
         {
             brand.Id = id;
@@ -70,7 +70,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("/brands/{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {
             try

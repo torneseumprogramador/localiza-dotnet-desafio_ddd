@@ -30,6 +30,8 @@ namespace API.Controllers
             //await sql.CreateTable<Address>();
             //await sql.CreateTable<Model>();
             //await sql.CreateTable<Brand>();
+            await sql.CreateTable<Category>();
+            //await sql.CreateTable<Vehicle>();
 
             return "Sistema configurado";
         }

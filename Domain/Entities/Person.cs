@@ -33,7 +33,7 @@ namespace Domain.Entities
         public virtual string Password { get; set; }
 
         [Column]
-        public virtual int? IdAddress { get; set; }
+        public virtual int? AddressId { get; set; }
 
         public virtual PersonRole Role { get { return (PersonRole)Enum.ToObject(typeof(PersonRole), this.Type); } }
     }

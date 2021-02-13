@@ -33,7 +33,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/models")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Model model)
         {
             try
@@ -51,7 +51,7 @@ namespace api.Controllers
 
         [HttpPut]
         [Route("/models/{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Model model)
         {
             model.Id = id;
@@ -70,7 +70,7 @@ namespace api.Controllers
 
         [HttpDelete]
         [Route("/models/{id}")]
-        [Authorize(Roles = "User")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)
         {
             try

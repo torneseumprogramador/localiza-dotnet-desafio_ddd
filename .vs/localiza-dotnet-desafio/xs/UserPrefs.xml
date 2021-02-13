@@ -9,10 +9,9 @@
             </Node>
             <Node name="Domain" expanded="True">
               <Node name="Entities" expanded="True">
-                <Node name="Brand.cs" selected="True" />
+                <Node name="Schedule.cs" selected="True" />
               </Node>
               <Node name="UseCase" expanded="True">
-                <Node name="Builders" expanded="True" />
                 <Node name="PersonServices" expanded="True" />
               </Node>
               <Node name="ViewModel" expanded="True" />
@@ -24,11 +23,6 @@
               </Node>
             </Node>
           </Node>
-        </State>
-      </Pad>
-      <Pad Id="MonoDevelop.Debugger.WatchPad">
-        <State>
-          <Value>param.GetType().GetProperty("Key").GetValue(param, null);</Value>
         </State>
       </Pad>
     </Pads>
