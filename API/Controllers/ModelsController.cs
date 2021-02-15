@@ -60,7 +60,7 @@ namespace api.Controllers
             model.Id = id;
             try
             {
-                await _entityService.Save(model);
+                await _entityService.Update(model);
                 return StatusCode(204);
             }
             catch(EntityUniq err)

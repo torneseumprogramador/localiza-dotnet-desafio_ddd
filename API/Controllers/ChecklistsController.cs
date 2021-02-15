@@ -57,7 +57,7 @@ namespace api.Controllers
             checklist.Id = id;
             try
             {
-                await _entityService.Save(checklist);
+                await _entityService.Update(checklist);
                 return StatusCode(204);
             }
             catch(EntityUniq err)

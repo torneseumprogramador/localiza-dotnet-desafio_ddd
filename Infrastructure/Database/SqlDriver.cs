@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.IO;
 using System.Threading.Tasks;
+using Newtonsoft.Json.Linq;
 
 namespace Infrastructure.Database
 {
@@ -11,6 +13,12 @@ namespace Infrastructure.Database
         public SqlDriver()
         {
             string cnn = Environment.GetEnvironmentVariable("CONNECTION_STRING", EnvironmentVariableTarget.Process);
+            if (string.IsNullOrEmpty(cnn))
+            {
+                JToken jAppSettings = JToken.Parse(File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "appsettings.json")));
+                cnn = jAppSettings["cnnLocal"].ToString();
+            }
+
             this.connectionString = cnn;
         }
 
@@ -184,12 +192,8 @@ namespace Infrastructure.Database
         {
             foreach (var p in modelo.GetType().GetProperties())
             {
-                try
-                {
-                    if (dr[p.Name] == DBNull.Value) continue;
-                    p.SetValue(modelo, dr[p.Name]);
-                }
-                catch { }
+                if (dr[p.Name] == DBNull.Value) continue;
+                p.SetValue(modelo, dr[p.Name]);
             }
         }
 

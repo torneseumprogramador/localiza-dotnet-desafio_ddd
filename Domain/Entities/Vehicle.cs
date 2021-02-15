@@ -37,12 +37,10 @@ namespace Domain.Entities
 
         [Column]
         [Required]
-        [MaxLength(50)]
         public double HourValue { get; set; }
 
         [Column]
         [Required]
-        [MaxLength(50)]
         public int LuggageCapacity { get; set; }
 
         [Column]

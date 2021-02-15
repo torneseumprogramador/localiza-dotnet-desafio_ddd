@@ -60,7 +60,7 @@ namespace api.Controllers
             category.Id = id;
             try
             {
-                await _entityService.Save(category);
+                await _entityService.Update(category);
                 return StatusCode(204);
             }
             catch(EntityUniq err)

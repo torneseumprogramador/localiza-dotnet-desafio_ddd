@@ -34,6 +34,7 @@ namespace api.Controllers
 
         [HttpPost]
         [Route("/brands")]
+        [Route("/marcas")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Brand brand)
         {
@@ -59,7 +60,7 @@ namespace api.Controllers
             brand.Id = id;
             try
             {
-                await _entityService.Save(brand);
+                await _entityService.Update(brand);
                 return StatusCode(204);
             }
             catch(EntityUniq err)

@@ -23,7 +23,7 @@ namespace Domain.ViewModel
 
         public string LicensePlate { get; set; }
 
-        public DateTime Date { get; set; }
+        public double HourValue { get; set; }
 
         public int LuggageCapacity { get; set; }
 

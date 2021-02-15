@@ -91,7 +91,7 @@ namespace api.Controllers
             schedule.Id = id;
             try
             {
-                await _entityService.Save(schedule);
+                await _entityService.Update(schedule);
                 return StatusCode(204);
             }
             catch (EntityUniq err)

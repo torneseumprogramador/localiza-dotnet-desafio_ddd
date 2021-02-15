@@ -114,8 +114,11 @@ namespace Infrastructure.Database
                 case "Int64":
                     field = " bigint" + (validate ? " NOT NULL" : "");
                     break;
-                case "Double":
+                case "Decimal":
                     field = " decimal(9, 2)" + (validate ? " NOT NULL" : "");
+                    break;
+                case "Double":
+                    field = " float" + (validate ? " NOT NULL" : "");
                     break;
                 case "Single":
                     field = " float" + (validate ? " NOT NULL" : "");

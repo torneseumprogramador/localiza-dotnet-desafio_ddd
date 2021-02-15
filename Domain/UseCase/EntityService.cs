@@ -20,6 +20,11 @@ namespace Domain.UseCase.UserServices
             await repository.Save(entity);
         }
 
+        public virtual async Task Update<T>(T entity)
+        {
+            await repository.Update(entity);
+        }
+
         public async Task Delete<T>(int id)
         {
             if (id == 0) throw new EntityEmptyId("Id não pode ser vazio");

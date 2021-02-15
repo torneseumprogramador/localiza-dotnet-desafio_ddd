@@ -61,7 +61,7 @@ namespace api.Controllers
             vehicle.Id = id;
             try
             {
-                await _entityService.Save(vehicle);
+                await _entityService.Update(vehicle);
                 return StatusCode(204);
             }
             catch (EntityUniq err)
