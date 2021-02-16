@@ -72,7 +72,7 @@ namespace Domain.UseCase
             body += "<hr>";
             body += $"Carro limpo: {(checklist.CleanCar ? "Sim" : "Não")}<br>";
             body += $"Tanque cheio: {(checklist.FullTank ? "Sim" : "Não")}<br>";
-            body += $"Tanque litro pendente: {(checklist.PendingCleanCar ? "Sim" : "Não")}<br>";
+            body += $"Quantidade de litros pendentes: {checklist.PendingFullTank} litros<br>";
             body += $"Amassado: {(checklist.Scratches ? "Sim" : "Não")}<br>";
             body += $"Arranhões: {(checklist.Wrinkled ? "Sim" : "Não")}";
             body += "<hr>";

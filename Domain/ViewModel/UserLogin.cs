@@ -1,10 +1,13 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
 {
     public record UserLogin
     {
-      public string CPF {get;set;}        
-      public string Password {get;set;}        
+        [JsonPropertyName("CPF")]
+        public string CPF { get; set; }
+        [JsonPropertyName("Senha")]
+        public string Password { get; set; }
     }
 }

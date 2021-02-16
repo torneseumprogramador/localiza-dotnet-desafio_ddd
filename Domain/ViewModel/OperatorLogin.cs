@@ -1,10 +1,13 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
 {
     public record OperatorLogin
     {
-      public string Registration { get;set;}        
-      public string Password {get;set;}        
+        [JsonPropertyName("Matricula")]
+        public string Registration { get;set;}        
+        [JsonPropertyName("Senha")]
+        public string Password {get;set;}        
     }
 }

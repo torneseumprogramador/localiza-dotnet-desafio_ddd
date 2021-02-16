@@ -24,7 +24,6 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("/brands")]
         [Route("/marcas")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Brand>> Index()
@@ -33,7 +32,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/brands")]
         [Route("/marcas")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Brand brand)
@@ -52,7 +50,6 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/brands/{id}")]
         [Route("/marcas/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Brand brand)
@@ -72,7 +69,6 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/brands/{id}")]
         [Route("/marcas/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)

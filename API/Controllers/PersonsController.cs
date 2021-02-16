@@ -23,7 +23,6 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("/persons")]
         [Route("/pessoas")]
         [Authorize(Roles = "Operator")]
         public async Task<ICollection<Person>> Index()

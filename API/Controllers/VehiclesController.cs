@@ -24,7 +24,6 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("/vehicles")]
         [Route("/veiculos")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Vehicle>> Index()
@@ -33,7 +32,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/vehicles")]
         [Route("/veiculos")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Vehicle vehicle)
@@ -53,7 +51,6 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/vehicles/{id}")]
         [Route("/veiculos/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Vehicle vehicle)
@@ -74,7 +71,6 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/vehicles/{id}")]
         [Route("/veiculos/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)

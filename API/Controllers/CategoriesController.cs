@@ -24,7 +24,6 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("/categories")]
         [Route("/categorias")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Category>> Index()
@@ -33,7 +32,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/categories")]
         [Route("/categorias")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Create([FromBody] Category category)
@@ -52,7 +50,6 @@ namespace api.Controllers
         }
 
         [HttpPut]
-        [Route("/categories/{id}")]
         [Route("/categorias/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Update(int id, [FromBody] Category category)
@@ -72,7 +69,6 @@ namespace api.Controllers
         }
 
         [HttpDelete]
-        [Route("/categories/{id}")]
         [Route("/categorias/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)

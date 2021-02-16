@@ -1,9 +1,11 @@
 using System;
+using System.Text.Json.Serialization;
 
 namespace Domain.ViewModel
 {
     public record Welcome
     {
+        [JsonPropertyName("Mensagem")]
         public string Message
         { 
           get
@@ -12,6 +14,7 @@ namespace Domain.ViewModel
           }
         }
 
+        [JsonPropertyName("Documentacao")]
         public string Documentation
         { 
           get

@@ -13,24 +13,30 @@ namespace Domain.Entities
 	{
 		[Column]
 		[JsonIgnore]
+        [JsonPropertyName("Documento")]
 		public override string Document { get; set; }
 
 		[JsonIgnore]
 		[Column]
+        [JsonPropertyName("Tipo")]
 		public override int Type { get; set; }
 
 		[Column]
+        [JsonPropertyName("DataAniversario")]
 		public DateTime Birthday { get; set; }
 
 		[Column]
 		[JsonIgnore]
+        [JsonPropertyName("EnderecoId")]
 		public override int? AddressId { get; set; }
 
+        [JsonPropertyName("Endereco")]
 		public Address Address { get; set; }
 
 		[Required]
+        [JsonPropertyName("CPF")]
 		public string CPF
-		{
+        {
 			get
 			{
                 if (!string.IsNullOrEmpty(this.Document) && !isCPFValid()) throw new UserInvalidCPF("Número de CPF inválido");
@@ -42,6 +48,7 @@ namespace Domain.Entities
             }
 		}
 
+        [JsonPropertyName("TipoDeAcesso")]
 		public override PersonRole Role
 		{
 			get
@@ -49,7 +56,6 @@ namespace Domain.Entities
 				return PersonRole.User;
 			}
 		}
-
 
         private bool isCPFValid()
         {

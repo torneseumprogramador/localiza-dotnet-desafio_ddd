@@ -12,17 +12,21 @@ namespace Domain.Entities
     {   
         [Column]
 		[JsonIgnore]
+        [JsonPropertyName("Documento")]
         public override string Document { get; set; }
 
         [Column]
 		[JsonIgnore]
+        [JsonPropertyName("Tipo")]
         public override int Type { get; set; }
 
         [Column]
         [JsonIgnore]
+        [JsonPropertyName("EnderecoId")]
         public override int? AddressId { get; set; }
 
         [Required]
+        [JsonPropertyName("Matricula")]
         public string Registration
         {
             get
@@ -35,6 +39,7 @@ namespace Domain.Entities
             }
         }
 
+        [JsonPropertyName("TipoDeAcesso")]
         public override PersonRole Role
         {
             get

@@ -8,7 +8,9 @@ namespace Domain.ViewModel
 {
     public record SchedulePaymentOut
     {
+        [JsonPropertyName("Agendamento")]
         public Schedule Schedule { get; set; }
+        [JsonPropertyName("PagamentoPrevisto")]
         public string Invoice { get; set; }
     }
 }

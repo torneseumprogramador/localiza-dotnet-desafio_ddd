@@ -29,7 +29,6 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        [Route("/schedules")]
         [Route("/agendamentos")]
         [Authorize(Roles = "User, Operator")]
         public async Task<ICollection<Schedule>> Index()
@@ -38,7 +37,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/schedule/simulation")]
         [Route("/agendamento/simulacao")]
         [Authorize(Roles = "User, Operator")]
         public async Task<IActionResult> Simulation([FromBody] VehicleScheduleSimulationInput schedule)
@@ -64,7 +62,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/schedule/book")]
         [Route("/agendamento/alugar")]
         [Authorize(Roles = "Operator, User")]
         public async Task<IActionResult> BookCar([FromBody] ScheduleInput schedule)
@@ -84,7 +81,6 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/schedule/return")]
         [Route("/agendamento/devolucao")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> ReturnPayment([FromBody] Checklist checklist)
@@ -105,7 +101,6 @@ namespace api.Controllers
 
 
         [HttpDelete]
-        [Route("/schedules/{id}")]
         [Route("/agendamentos/{id}")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> Delete(int id)

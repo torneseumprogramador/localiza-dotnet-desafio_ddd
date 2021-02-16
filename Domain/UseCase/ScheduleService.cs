@@ -96,8 +96,6 @@ namespace Domain.UseCase
                 schedule.Total += (schedule.Subtotal * 30 / 100);
             if (!checklist.FullTank)
                 schedule.Total += (schedule.Subtotal * 30 / 100);
-            if (!checklist.PendingCleanCar)
-                schedule.Total += (schedule.Subtotal * 30 / 100);
             if (!checklist.Wrinkled)
                 schedule.Total += (schedule.Subtotal * 30 / 100);
             if (!checklist.Scratches)
