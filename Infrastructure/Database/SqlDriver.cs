@@ -192,8 +192,12 @@ namespace Infrastructure.Database
         {
             foreach (var p in modelo.GetType().GetProperties())
             {
-                if (dr[p.Name] == DBNull.Value) continue;
-                p.SetValue(modelo, dr[p.Name]);
+                try
+                {
+                    if (dr[p.Name] == DBNull.Value) continue;
+                    p.SetValue(modelo, dr[p.Name]);
+                }
+                catch { }
             }
         }
 

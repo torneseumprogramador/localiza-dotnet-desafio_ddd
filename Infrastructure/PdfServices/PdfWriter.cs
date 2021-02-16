@@ -8,11 +8,21 @@ namespace Infrastructure.PdfServices
     {
         public string Build(string html)
         {
-            HtmlToPdf converter = new HtmlToPdf();
-            PdfDocument doc = converter.ConvertHtmlString(html);
-            var pathPDF = "/RentalPaymentReceipts/RentalPaymentReceipts-{DateTime.Now:ddmmYYYY}.pdf";
-            doc.Save($"{AppDomain.CurrentDomain.BaseDirectory}{pathPDF}");
-            doc.Close();
+            var pathPDF = "/pdf-nao-gerrado-erro-verifique-o-servidor.pdf";
+            try
+            {
+                HtmlToPdf converter = new HtmlToPdf();
+                PdfDocument doc = converter.ConvertHtmlString(html);
+                pathPDF = "/RentalPaymentReceipts/RentalPaymentReceipts-{DateTime.Now:ddmmYYYY}.pdf";
+                doc.Save($"{AppDomain.CurrentDomain.BaseDirectory}{pathPDF}");
+                doc.Close();
+            }
+            catch (Exception erro)
+            {
+                Console.WriteLine(erro.Message);
+                Console.WriteLine(erro.StackTrace);
+            }
+
             return pathPDF;
         }
     }

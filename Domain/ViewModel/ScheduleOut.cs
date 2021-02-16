@@ -7,6 +7,7 @@ namespace Domain.ViewModel
 {
     public record ScheduleOut
     {
+        public int Id { get; set; }
         public int VehicleId { get; set; }
         public double RentalHours { get; set; }
         public DateTime Date { get; set; }

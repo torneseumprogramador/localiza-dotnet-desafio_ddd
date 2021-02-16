@@ -56,12 +56,16 @@ namespace Domain.UseCase
         public async Task<ScheduleOut> BookCar(ScheduleInput scheduleInput, IPdfWriter pdfWriter)
         {
             if (scheduleInput.UserId == 0 && scheduleInput.OparatorId == 0) throw new ObligatoryScheduleUserOrOperator("Para fazer a reserva selecione o usuário ou o operador");
+            if (scheduleInput.VehicleId == 0) throw new EntityNotFound("Veículo obrigatório");
+            var vehicle = await entityRepository.FindById<Vehicle>(scheduleInput.VehicleId);
+            if (vehicle == null || vehicle.Id == 0) throw new EntityNotFound("Veículo não identificado");
 
             var schedule = EntityBuilder.Call<Schedule>(scheduleInput);
             schedule.Date = DateTime.Now;
             schedule.ExpectedCollective = DateTime.Now.AddHours(schedule.HourlyValue + 2); // 2 horas para revisão do veículo
+            schedule.CollectiveHeld = schedule.ExpectedCollective;
             schedule.EstimatedDeliveryTime = DateTime.Now.AddHours(schedule.HourlyValue);
-            var vehicle = await entityRepository.FindById<Vehicle>(schedule.Id);
+            schedule.DeliveryCompleted = schedule.EstimatedDeliveryTime;
             schedule.HourlyValue = vehicle.HourValue;
             schedule.RentalHours = schedule.RentalHours;
             schedule.Subtotal = schedule.RentalHours * vehicle.HourValue;
@@ -99,6 +103,7 @@ namespace Domain.UseCase
             if (!checklist.Scratches)
                 schedule.Total += (schedule.Subtotal * 30 / 100);
 
+            schedule.AdditionalCosts = schedule.Total - schedule.Subtotal;
             schedule.SurveyPerformed = true;
             schedule.Checklist = checklist;
 
