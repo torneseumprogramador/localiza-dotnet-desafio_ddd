@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Infrastructure.Database;
 
-namespace Infrastructure.Services.Person
+namespace Infrastructure.RepositoryServices.Person
 {
     public class PersonRepository : IPersonRepository
     {

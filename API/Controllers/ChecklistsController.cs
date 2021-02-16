@@ -5,8 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services;
-using Infrastructure.Services.Exceptions;
+using Infrastructure.RepositoryServices;
+using Infrastructure.RepositoryServices.Exceptions;
 using Domain.UseCase.UserServices;
 
 namespace api.Controllers

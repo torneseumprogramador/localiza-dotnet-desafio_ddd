@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services;
-using Infrastructure.Services.Exceptions;
+using Infrastructure.RepositoryServices;
+using Infrastructure.RepositoryServices.Exceptions;
 using Domain.UseCase.UserServices;
 using Domain.ViewModel;
 using Domain.UseCase;
+using Infrastructure.PdfServices;
 
 namespace api.Controllers
 {
@@ -63,17 +64,17 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/schedules")]
-        [Route("/agendamentos")]
-        [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Create([FromBody] Schedule schedule)
+        [Route("/schedule/book")]
+        [Route("/agendamento/alugar")]
+        [Authorize(Roles = "Operator, User")]
+        public async Task<IActionResult> BookCar([FromBody] ScheduleInput schedule)
         {
             try
             {
-                await _entityService.Save(schedule);
-                return StatusCode(201);
+                var scheduleOut = await _scheduleService.BookCar(schedule, new PdfWriter());
+                return StatusCode(201, scheduleOut);
             }
-            catch (EntityUniq err)
+            catch (EntityNotFound err)
             {
                 return StatusCode(401, new
                 {
@@ -82,19 +83,18 @@ namespace api.Controllers
             }
         }
 
-        [HttpPut]
-        [Route("/schedules/{id}")]
-        [Route("/agendamentos/{id}")]
+        [HttpPost]
+        [Route("/schedule/payment")]
+        [Route("/agendamento/pagamento")]
         [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> Update(int id, [FromBody] Schedule schedule)
+        public async Task<IActionResult> ReturnPayment([FromBody] Checklist checklist)
         {
-            schedule.Id = id;
             try
             {
-                await _entityService.Update(schedule);
-                return StatusCode(204);
+                var schedulePaymentOut = await _scheduleService.ReturnPayment(checklist, new PdfWriter());
+                return StatusCode(201, schedulePaymentOut);
             }
-            catch (EntityUniq err)
+            catch (EntityNotFound err)
             {
                 return StatusCode(401, new
                 {
@@ -102,6 +102,7 @@ namespace api.Controllers
                 });
             }
         }
+
 
         [HttpDelete]
         [Route("/schedules/{id}")]

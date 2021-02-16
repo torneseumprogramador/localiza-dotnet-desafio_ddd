@@ -4,13 +4,15 @@ using System.Threading.Tasks;
 using Domain.Authentication;
 using Domain.Entities;
 using Domain.Entities.Enums;
+using Domain.Entities.Exceptions;
 using Domain.Entities.Interfaces;
 using Domain.UseCase.Builders;
 using Domain.ViewModel;
 using Domain.ViewModel.Jwt;
-using Infrastructure.Services;
-using Infrastructure.Services.Exceptions;
-using Infrastructure.Services.Person;
+using Infrastructure.PdfServices;
+using Infrastructure.RepositoryServices;
+using Infrastructure.RepositoryServices.Exceptions;
+using Infrastructure.RepositoryServices.Person;
 
 namespace Domain.UseCase
 {
@@ -48,6 +50,64 @@ namespace Domain.UseCase
                 Total = vehicleMap.HourValue * scheduleInput.Hours,
                 EndDate = DateTime.Now,
                 StartDate = DateTime.Now.AddHours(scheduleInput.Hours)
+            };
+        }
+
+        public async Task<ScheduleOut> BookCar(ScheduleInput scheduleInput, IPdfWriter pdfWriter)
+        {
+            if (scheduleInput.UserId == 0 && scheduleInput.OparatorId == 0) throw new ObligatoryScheduleUserOrOperator("Para fazer a reserva selecione o usuário ou o operador");
+
+            var schedule = EntityBuilder.Call<Schedule>(scheduleInput);
+            schedule.Date = DateTime.Now;
+            schedule.ExpectedCollective = DateTime.Now.AddHours(schedule.HourlyValue + 2); // 2 horas para revisão do veículo
+            schedule.EstimatedDeliveryTime = DateTime.Now.AddHours(schedule.HourlyValue);
+            var vehicle = await entityRepository.FindById<Vehicle>(schedule.Id);
+            schedule.HourlyValue = vehicle.HourValue;
+            schedule.RentalHours = schedule.RentalHours;
+            schedule.Subtotal = schedule.RentalHours * vehicle.HourValue;
+            schedule.Total = schedule.Subtotal;
+            await entityRepository.Save(schedule);
+            schedule.Vehicle = vehicle;
+            var scheduleOut = EntityBuilder.Call<ScheduleOut>(schedule);
+            scheduleOut.RentalPaymentReceipt = await new PdfService(pdfWriter).BuildRentalPDF(schedule, entityRepository);
+            return scheduleOut;
+        }
+
+        public async Task<SchedulePaymentOut> ReturnPayment(Checklist checklist, IPdfWriter pdfWriter)
+        {
+            if (checklist.ScheduleId == 0) throw new EntityNotFound("Identificador do agendamento obrigatorio");
+            var schedule = await entityRepository.FindById<Schedule>(checklist.ScheduleId);
+            if (schedule == null || schedule.Id == 0) throw new EntityNotFound("Identificador do agendamento não encontrado");
+
+            if (checklist.OperatorId == 0) throw new EntityNotFound("Operador obrigatorio");
+            var op = await entityRepository.FindById<Operator>(checklist.OperatorId);
+            if (op == null || op.Id == 0) throw new EntityNotFound("Operador não identificado");
+
+            await entityRepository.Save(checklist);
+
+            schedule.CollectiveHeld = DateTime.Now;
+            schedule.DeliveryCompleted = DateTime.Now;
+
+            if(!checklist.CleanCar) 
+                schedule.Total += (schedule.Subtotal * 30 / 100);
+            if (!checklist.FullTank)
+                schedule.Total += (schedule.Subtotal * 30 / 100);
+            if (!checklist.PendingCleanCar)
+                schedule.Total += (schedule.Subtotal * 30 / 100);
+            if (!checklist.Wrinkled)
+                schedule.Total += (schedule.Subtotal * 30 / 100);
+            if (!checklist.Scratches)
+                schedule.Total += (schedule.Subtotal * 30 / 100);
+
+            schedule.SurveyPerformed = true;
+            schedule.Checklist = checklist;
+
+            await entityRepository.Save(schedule);
+
+            return new SchedulePaymentOut()
+            {
+                Schedule = schedule,
+                Invoice = await new PdfService(pdfWriter).BuildPaymentPDF(schedule, entityRepository)
             };
         }
     }

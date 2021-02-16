@@ -10,6 +10,7 @@ namespace Domain.Entities
     {
         [Key]
         [Column]
+        [JsonIgnore]
         public int Id { get; set; }
 
         [Column]
@@ -31,5 +32,13 @@ namespace Domain.Entities
         [Column]
         [Required]
         public bool Scratches { get; set; }
+
+        [Column]
+        [Required]
+        public int ScheduleId { get; set; }
+
+        [Column]
+        [Required]
+        public int OperatorId { get; set; }
     }
 }

@@ -20,8 +20,6 @@ namespace Domain.ViewModel
 
         public string LicensePlate { get; set; }
 
-        public DateTime Date { get; set; }
-
         public int LuggageCapacity { get; set; }
 
         public TankCapacity TankCapacity { get; set; }

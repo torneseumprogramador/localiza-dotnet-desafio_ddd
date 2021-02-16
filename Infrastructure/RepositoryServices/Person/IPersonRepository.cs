@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Infrastructure.Services.Person
+namespace Infrastructure.RepositoryServices.Person
 {
     public interface IPersonRepository
     {

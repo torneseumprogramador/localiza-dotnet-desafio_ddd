@@ -18,6 +18,11 @@ namespace Domain.Entities
 
         [Column]
         [Required]
+        [JsonIgnore]
+        public Vehicle Vehicle { get; set; }
+
+        [Column]
+        [Required]
         public int UserId { get; set; }
 
         [Column]
@@ -33,7 +38,6 @@ namespace Domain.Entities
         public DateTime ExpectedCollective { get; set; }
 
         [Column]
-        [Required]
         public DateTime CollectiveHeld { get; set; }
 
         [Column]
@@ -41,7 +45,6 @@ namespace Domain.Entities
         public DateTime EstimatedDeliveryTime { get; set; }
 
         [Column]
-        [Required]
         public DateTime DeliveryCompleted { get; set; }
 
         [Column]
@@ -61,11 +64,12 @@ namespace Domain.Entities
         public double AdditionalCosts { get; set; }
 
         [Column]
-        [Required]
         public double Total { get; set; }
 
         [Column]
         [Required]
-        public double SurveyCarriedOut { get; set; }
+        public bool SurveyPerformed { get; set; }
+
+        public Checklist Checklist { get; set; }
     }
 }

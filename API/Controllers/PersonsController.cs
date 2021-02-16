@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using Domain.Entities;
 using Domain.UseCase.UserServices;
 using Microsoft.AspNetCore.Authorization;
-using Infrastructure.Services;
+using Infrastructure.RepositoryServices;
 
 namespace api.Controllers
 {

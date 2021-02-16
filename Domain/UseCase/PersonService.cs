@@ -8,9 +8,9 @@ using Domain.Entities.Interfaces;
 using Domain.UseCase.Builders;
 using Domain.ViewModel;
 using Domain.ViewModel.Jwt;
-using Infrastructure.Services;
-using Infrastructure.Services.Exceptions;
-using Infrastructure.Services.Person;
+using Infrastructure.RepositoryServices;
+using Infrastructure.RepositoryServices.Exceptions;
+using Infrastructure.RepositoryServices.Person;
 
 namespace Domain.UseCase
 {

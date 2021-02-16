@@ -5,7 +5,7 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Infrastructure.Database;
 
-namespace Infrastructure.Services
+namespace Infrastructure.RepositoryServices
 {
     public class EntityRepository : IEntityRepository
     {

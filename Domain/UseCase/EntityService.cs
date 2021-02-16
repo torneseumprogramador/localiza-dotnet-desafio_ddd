@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Infrastructure.Services;
-using Infrastructure.Services.Exceptions;
+using Infrastructure.RepositoryServices;
+using Infrastructure.RepositoryServices.Exceptions;
 
 namespace Domain.UseCase.UserServices
 {

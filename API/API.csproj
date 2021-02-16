@@ -17,5 +17,6 @@
 
   <ItemGroup>
     <Folder Include="Authentication\" />
+    <Folder Include="RentalPaymentReceipts\" />
   </ItemGroup>
 </Project>

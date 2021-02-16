@@ -1,6 +1,6 @@
 using System;
 
-namespace Infrastructure.Services.Exceptions
+namespace Infrastructure.RepositoryServices.Exceptions
 {
     [Serializable]
     public class EntityUniq : Exception
