@@ -38,8 +38,8 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/schedules/simulation")]
-        [Route("/agendamentos/simulacao")]
+        [Route("/schedule/simulation")]
+        [Route("/agendamento/simulacao")]
         [Authorize(Roles = "User, Operator")]
         public async Task<IActionResult> Simulation([FromBody] VehicleScheduleSimulationInput schedule)
         {
@@ -84,8 +84,8 @@ namespace api.Controllers
         }
 
         [HttpPost]
-        [Route("/schedule/payment")]
-        [Route("/agendamento/pagamento")]
+        [Route("/schedule/return")]
+        [Route("/agendamento/devolucao")]
         [Authorize(Roles = "Operator")]
         public async Task<IActionResult> ReturnPayment([FromBody] Checklist checklist)
         {
