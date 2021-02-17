@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text.Json.Serialization;
+using Domain.Entities;
 
 namespace Domain.ViewModel
 {
@@ -9,6 +10,8 @@ namespace Domain.ViewModel
         public int Id { get; set; }
         [JsonPropertyName("VeiculoId")]
         public int VehicleId { get; set; }
+        [JsonPropertyName("Veiculo")]
+        public Vehicle Vehicle { get; set; }
         [JsonPropertyName("HorasLocacao")]
         public double RentalHours { get; set; }
         [JsonPropertyName("Data")]

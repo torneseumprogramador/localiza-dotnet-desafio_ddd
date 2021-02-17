@@ -84,6 +84,26 @@ namespace api.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("/agendamento/consulta/{cpf}")]
+        [Authorize(Roles = "Operator, User")]
+        public async Task<IActionResult> GetByCPF(string cpf)
+        {
+            try
+            {
+                var path = Startup.ContentRoot;
+                var scheduleOut = await _scheduleService.GetByCPF(cpf, new PdfWriter(), path);
+                return StatusCode(201, scheduleOut);
+            }
+            catch (EntityNotFound err)
+            {
+                return StatusCode(401, new
+                {
+                    Message = err.Message
+                });
+            }
+        }
+
         [HttpPost]
         [Route("/agendamento/devolucao")]
         [Authorize(Roles = "Operator")]

@@ -77,6 +77,22 @@ namespace Domain.UseCase
             return scheduleOut;
         }
 
+        public async Task<ScheduleOut> GetByCPF(string cpf, IPdfWriter pdfWriter, string pathPDF)
+        {
+            var parameters = new List<dynamic>();
+            parameters.Add(new
+            {
+                Key = "Document",
+                Value = cpf
+            });
+
+            var schedule = await entityRepository.Get<Schedule>("sp_getScheduleByDocument", parameters);
+            var scheduleOut = EntityBuilder.Call<ScheduleOut>(schedule);
+            scheduleOut.Vehicle = await entityRepository.FindById<Vehicle>(schedule.VehicleId);
+            scheduleOut.RentalPaymentReceipt = await new PdfService(pdfWriter).BuildRentalPDF(schedule, entityRepository, pathPDF);
+            return scheduleOut;
+        }
+
         public async Task<SchedulePaymentOut> ReturnPayment(Checklist checklist, IPdfWriter pdfWriter, string pathPDF)
         {
             if (checklist.ScheduleId == 0) throw new EntityNotFound("Identificador do agendamento obrigatorio");
