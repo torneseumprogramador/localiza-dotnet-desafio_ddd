@@ -37,5 +37,15 @@ namespace Domain.UseCase.UserServices
         {
            return await repository.All<T>();
         }
+
+        public async Task<ICollection<T>> All<T>(string key)
+        {
+            return await repository.All<T>(key);
+        }
+
+        public async Task<T> Get<T>(string key)
+        {
+            return await repository.Get<T>(key);
+        }
     }
 }

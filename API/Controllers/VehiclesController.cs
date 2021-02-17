@@ -31,6 +31,14 @@ namespace api.Controllers
             return await _entityService.All<Vehicle>();
         }
 
+        [HttpGet]
+        [Route("/veiculos/disponiveis")]
+        [Authorize(Roles = "User, Operator")]
+        public async Task<ICollection<Vehicle>> Available()
+        {
+            return await _entityService.All<Vehicle>("sp_getVeiclesAvailable");
+        }
+
         [HttpPost]
         [Route("/veiculos")]
         [Authorize(Roles = "Operator")]
