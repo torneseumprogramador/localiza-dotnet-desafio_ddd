@@ -14,7 +14,7 @@ namespace Domain.UseCase
 
         public IPdfWriter pdfWriter { get; }
 
-        public async Task<string> BuildRentalPDF(Schedule schedule, IEntityRepository entityRepository)
+        public async Task<string> BuildRentalPDF(Schedule schedule, IEntityRepository entityRepository, string pathPDF)
         {
             var vehicle = await entityRepository.FindById<Vehicle>(schedule.VehicleId);
             var category = await entityRepository.FindById<Category>(vehicle.CategoryId);
@@ -43,10 +43,10 @@ namespace Domain.UseCase
             body += $"<h2>Valor Estimado: R${schedule.Subtotal}</h2>";
             body += "<hr>";
 
-            return pdfWriter.Build(body);
+            return pdfWriter.Build(pathPDF, body);
         }
 
-        public async Task<string> BuildPaymentPDF(Schedule schedule, IEntityRepository entityRepository)
+        public async Task<string> BuildPaymentPDF(Schedule schedule, IEntityRepository entityRepository, string pathPDF)
         {
             var vehicle = await entityRepository.FindById<Vehicle>(schedule.VehicleId);
             var category = await entityRepository.FindById<Category>(vehicle.CategoryId);
@@ -90,7 +90,7 @@ namespace Domain.UseCase
             body += $"<h2>Valor Total: R${schedule.Total}</h2>";
             body += "<hr>";
 
-            return pdfWriter.Build(body);
+            return pdfWriter.Build(pathPDF, body);
         }
     }
 }

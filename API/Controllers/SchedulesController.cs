@@ -11,6 +11,9 @@ using Domain.UseCase.UserServices;
 using Domain.ViewModel;
 using Domain.UseCase;
 using Infrastructure.PdfServices;
+using System.IO;
+using System.Reflection;
+using API;
 
 namespace api.Controllers
 {
@@ -68,7 +71,8 @@ namespace api.Controllers
         {
             try
             {
-                var scheduleOut = await _scheduleService.BookCar(schedule, new PdfWriter());
+                var path = Startup.ContentRoot;
+                var scheduleOut = await _scheduleService.BookCar(schedule, new PdfWriter(), path);
                 return StatusCode(201, scheduleOut);
             }
             catch (EntityNotFound err)
@@ -87,7 +91,8 @@ namespace api.Controllers
         {
             try
             {
-                var schedulePaymentOut = await _scheduleService.ReturnPayment(checklist, new PdfWriter());
+                var path = Startup.ContentRoot;
+                var schedulePaymentOut = await _scheduleService.ReturnPayment(checklist, new PdfWriter(), path);
                 return StatusCode(201, schedulePaymentOut);
             }
             catch (EntityNotFound err)

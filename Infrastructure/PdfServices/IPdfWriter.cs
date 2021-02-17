@@ -2,6 +2,6 @@
 {
     public interface IPdfWriter
     {
-        string Build(string body);
+        string Build(string path, string body);
     }
 }

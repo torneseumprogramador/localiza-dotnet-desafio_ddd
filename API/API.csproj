@@ -17,6 +17,15 @@
 
   <ItemGroup>
     <Folder Include="Authentication\" />
-    <Folder Include="RentalPaymentReceipts\" />
+    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\RentalPaymentReceipts\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\RentalPaymentReceipts\.gitkeep" />
+    <Content Remove="wwwroot\RentalPaymentReceipts\RentalPaymentReceipts-16-20-YYYY.pdf" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\RentalPaymentReceipts\.gitkeep" />
+    <None Include="wwwroot\RentalPaymentReceipts\RentalPaymentReceipts-16-20-YYYY.pdf" />
   </ItemGroup>
 </Project>

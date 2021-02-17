@@ -53,7 +53,7 @@ namespace Domain.UseCase
             };
         }
 
-        public async Task<ScheduleOut> BookCar(ScheduleInput scheduleInput, IPdfWriter pdfWriter)
+        public async Task<ScheduleOut> BookCar(ScheduleInput scheduleInput, IPdfWriter pdfWriter, string pathPDF)
         {
             if (scheduleInput.UserId == 0 && scheduleInput.OparatorId == 0) throw new ObligatoryScheduleUserOrOperator("Para fazer a reserva selecione o usuário ou o operador");
             if (scheduleInput.VehicleId == 0) throw new EntityNotFound("Veículo obrigatório");
@@ -73,11 +73,11 @@ namespace Domain.UseCase
             await entityRepository.Save(schedule);
             schedule.Vehicle = vehicle;
             var scheduleOut = EntityBuilder.Call<ScheduleOut>(schedule);
-            scheduleOut.RentalPaymentReceipt = await new PdfService(pdfWriter).BuildRentalPDF(schedule, entityRepository);
+            scheduleOut.RentalPaymentReceipt = await new PdfService(pdfWriter).BuildRentalPDF(schedule, entityRepository, pathPDF);
             return scheduleOut;
         }
 
-        public async Task<SchedulePaymentOut> ReturnPayment(Checklist checklist, IPdfWriter pdfWriter)
+        public async Task<SchedulePaymentOut> ReturnPayment(Checklist checklist, IPdfWriter pdfWriter, string pathPDF)
         {
             if (checklist.ScheduleId == 0) throw new EntityNotFound("Identificador do agendamento obrigatorio");
             var schedule = await entityRepository.FindById<Schedule>(checklist.ScheduleId);
@@ -110,7 +110,7 @@ namespace Domain.UseCase
             return new SchedulePaymentOut()
             {
                 Schedule = schedule,
-                Invoice = await new PdfService(pdfWriter).BuildPaymentPDF(schedule, entityRepository)
+                Invoice = await new PdfService(pdfWriter).BuildPaymentPDF(schedule, entityRepository, pathPDF)
             };
         }
     }
