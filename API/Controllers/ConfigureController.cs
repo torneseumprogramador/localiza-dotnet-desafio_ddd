@@ -21,7 +21,6 @@ namespace API.Controllers
         }
 
         [HttpPost]
-        [Route("/start")]
         [Route("/comecar")]
         [AllowAnonymous]
         public string InicialConfig()
