@@ -26,7 +26,7 @@ namespace Test.Infrastructure.Database
         public void BuldGenericMapInsert()
         {
             var sql = MapTable.BuilderInsert(new Customer(){ Name = "Danilo" });
-            Assert.AreEqual(sql, "insert into customers (name) values (@name)");
+            Assert.AreEqual(sql, "insert into customers (name) values (@name) SELECT SCOPE_IDENTITY()");
         }
 
         [Test]
@@ -79,5 +79,13 @@ namespace Test.Infrastructure.Database
             Assert.AreEqual(parameters[0].ParameterName, "@name");
             Assert.AreEqual(parameters[0].SqlDbType, SqlDbType.VarChar);
         }
+
+        [Test]
+        public void CreateTable()
+        {
+            var sql = MapTable.CreateTable<Customer>();
+            Assert.AreEqual(sql, "IF EXISTS (SELECT * FROM dbo.sysobjects WHERE id = OBJECT_ID(N'[dbo].[customers]') AND OBJECTPROPERTY(id, N'IsUserTable') = 1)DROP TABLE customers;CREATE TABLE customers(id  int  IDENTITY(1,1) NOT NULL, name  varchar(255), phone  varchar(255), )");
+        }
+
     }
 }
