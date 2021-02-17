@@ -27,17 +27,9 @@ namespace Domain.UseCase
 
         public async Task<VehicleScheduleSimulationOutput> Simulation(VehicleScheduleSimulationInput scheduleInput)
         {
-            var parameters = new List<dynamic>
-            {
-                new
-                {
-                    Key = "VehicleId",
-                    Value = scheduleInput.VehicleId
-                }
-            };
-
+            var parameters = new List<dynamic> { new { Key = "VehicleId", Value = scheduleInput.VehicleId } };
             var completeVehicle = await entityRepository.Get<CompleteVehicle>("sp_completeVehicle", parameters);
-            if (completeVehicle == null || completeVehicle.Id == 0) throw new EntityNotFound("Veículo não encontrado");
+            if (completeVehicle == null || completeVehicle.Id == 0) throw new EntityNotFound("Veículo não disponível");
 
             var vehicleMap = EntityBuilder.Call<VehicleMap>(completeVehicle);
             vehicleMap.Model = new Model() { Id = completeVehicle.ModelId, Name = completeVehicle.Model };
@@ -57,8 +49,10 @@ namespace Domain.UseCase
         {
             if (scheduleInput.UserId == 0 && scheduleInput.OparatorId == 0) throw new ObligatoryScheduleUserOrOperator("Para fazer a reserva selecione o usuário ou o operador");
             if (scheduleInput.VehicleId == 0) throw new EntityNotFound("Veículo obrigatório");
-            var vehicle = await entityRepository.FindById<Vehicle>(scheduleInput.VehicleId);
-            if (vehicle == null || vehicle.Id == 0) throw new EntityNotFound("Veículo não identificado");
+
+            var parameters = new List<dynamic> { new { Key = "VehicleId", Value = scheduleInput.VehicleId } };
+            var vehicle = await entityRepository.Get<Vehicle>("sp_completeVehicle", parameters);
+            if (vehicle == null || vehicle.Id == 0) throw new EntityNotFound("Veículo não disponível");
 
             var schedule = EntityBuilder.Call<Schedule>(scheduleInput);
             schedule.Date = DateTime.Now;
@@ -80,12 +74,7 @@ namespace Domain.UseCase
         public async Task<ScheduleOut> GetByCPF(string cpf, IPdfWriter pdfWriter, string pathPDF)
         {
             var parameters = new List<dynamic>();
-            parameters.Add(new
-            {
-                Key = "Document",
-                Value = cpf
-            });
-
+            parameters.Add(new { Key = "Document", Value = cpf });
             var schedule = await entityRepository.Get<Schedule>("sp_getScheduleByDocument", parameters);
             var scheduleOut = EntityBuilder.Call<ScheduleOut>(schedule);
             scheduleOut.Vehicle = await entityRepository.FindById<Vehicle>(schedule.VehicleId);
